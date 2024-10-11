@@ -18,7 +18,44 @@ use Illuminate\Http\Request;
 class ReviewController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * get reviews of specefied movie.
+     *
+     * @OA\Get(
+     *      path="/api/movies/{movie_url}/reviews",
+     *      tags={"review"},
+     *      @OA\Parameter(
+     *          name="movie_url",
+     *          in="path",
+     *          description="url of movie",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="number of page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="perpage",
+     *          in="query",
+     *          description="number of items in a page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=10
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="ok",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function index(Request $req, string $url)
     {
@@ -34,8 +71,61 @@ class ReviewController extends Controller
             ->paginate($perpage));
     }
 
+    
+
     /**
-     * Store a newly created resource in storage.
+     * create a review.
+     *
+     * @OA\Post(
+     *      path="/api/movies/{movie_url}/reviews",
+     *      tags={"review"},
+     *      @OA\Parameter(
+     *          name="movie_url",
+     *          in="path",
+     *          description="url of movie",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="review",
+     *                      description="review text",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="score",
+     *                      description="integer between 0,100",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=201,
+     *          description="review created",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="validation error",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="movie is already reviewd ",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function store(StoreReview $req)
     {
@@ -52,7 +142,32 @@ class ReviewController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * get specified review.
+     *
+     * @OA\Get(
+     *      path="/api/reviews/{id}",
+     *      tags={"review"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="id of review",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="review not found",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="review found",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function show(Request $req, string $id)
     {
@@ -67,8 +182,55 @@ class ReviewController extends Controller
         return new ReviewResource($review);
     }
 
+    
     /**
-     * Update the specified resource in storage.
+     * update specified review.
+     *
+     * @OA\Put(
+     *      path="/api/reviews/{review_id}",
+     *      tags={"review"},
+     *      @OA\Parameter(
+     *          name="review_id",
+     *          in="path",
+     *          description="id of review",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="review",
+     *                      description="new review text",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="score",
+     *                      description="new score: integer between 0,100",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="review updated",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="review not found or not created by user ",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function update(UpdateReview $req)
     {
@@ -87,7 +249,34 @@ class ReviewController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * delete specified review.
+     *
+     * @OA\Delete(
+     *      path="/api/reviews/{review_id}",
+     *      tags={"review"},
+     *      @OA\Parameter(
+     *          name="review_id",
+     *          in="path",
+     *          description="id of review",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="review deleted",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="review not found or not created by user ",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function destroy(DestroyReview $req)
     {
@@ -99,6 +288,51 @@ class ReviewController extends Controller
         ], 200);
     }
 
+
+    /**
+     * like/dislike specified review.
+     *
+     * @OA\Post(
+     *      path="/api/reviews/{review_id}/like",
+     *      tags={"review"},
+     *      @OA\Parameter(
+     *          name="review_id",
+     *          in="path",
+     *          description="id of review",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="is_liked",
+     *                      description="",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="review liked/disliked",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="review already liked/disliked",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function storeLike(StoreReviewLike $req)
     {
         $validated = $req->validated();
@@ -112,6 +346,36 @@ class ReviewController extends Controller
         ], 201);
     }
 
+    /**
+     * remove like/dislike from specified review.
+     *
+     * @OA\Delete(
+     *      path="/api/reviews/{review_id}/like",
+     *      tags={"review"},
+     *      @OA\Parameter(
+     *          name="review_id",
+     *          in="path",
+     *          description="id of review",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="like/dislike deleted",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="review is not liked/disliked",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function destroyLike(DestroyReviewLike $req)
     {
         $validated = $req->validated();

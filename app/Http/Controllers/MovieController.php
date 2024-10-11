@@ -22,7 +22,35 @@ use Illuminate\Http\Request;
 class MovieController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * get movies.
+     *
+     * @OA\Get(
+     *      path="/api/movies",
+     *      tags={"movie"},
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="number of page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="perpage",
+     *          in="query",
+     *          description="number of items in a page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=10
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="ok",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function index(Request $req)
     {
@@ -35,8 +63,56 @@ class MovieController extends Controller
             ->paginate($perpage));
     }
 
+    
     /**
-     * Store a newly created resource in storage.
+     * create new movie.
+     *
+     * @OA\Post(
+     *      path="/api/movies",
+     *      tags={"movie"},
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="name",
+     *                      description="name of movie",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="url",
+     *                      description="url of movie",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="release_year",
+     *                      description="release_year of movie",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="category_name",
+     *                      description="category_name of movie",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=201,
+     *          description="movie created",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="validation error",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function store(StoreMovie $req)
     {
@@ -53,8 +129,34 @@ class MovieController extends Controller
         ], 201);
     }
 
+
     /**
-     * Display the specified resource.
+     * get specified movie.
+     *
+     * @OA\Get(
+     *      path="/api/movies/{url}",
+     *      tags={"movie"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of movie",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="movie not found",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="movie found",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function show(string $url)
     {
@@ -72,7 +174,69 @@ class MovieController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * update specified category.
+     *
+     * @OA\Put(
+     *      path="/api/movies/{url}",
+     *      tags={"movie"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of movie",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          description="Input data format",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="name",
+     *                      description="new name of movie",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="url",
+     *                      description="new url of movie",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="release_year",
+     *                      description="new release_year of movie",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="category_name",
+     *                      description="new category_name of movie",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="movie updated",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="movie not found",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="validation error",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function update(UpdateMovie $req)
     {
@@ -89,7 +253,35 @@ class MovieController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * delete specified category.
+     *
+     * @OA\Delete(
+     *      path="/api/movies/{url}",
+     *      tags={"movie"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of movie",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="movie deleted",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="movie not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function destroy(DestroyMovie $req, string $url)
     {
@@ -100,6 +292,52 @@ class MovieController extends Controller
         ], 200);
     }
 
+
+    /**
+     * like/dislike specified movie.
+     *
+     * @OA\Post(
+     *      path="/api/movies/{url}/like",
+     *      tags={"movie"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of movie",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="is_liked",
+     *                      description="liking or disliking movie",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=201,
+     *          description="like/dislike created",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="validation error",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function storeLike(StoreMovieLike $req)
     {
         $validated = $req->validated();
@@ -113,6 +351,38 @@ class MovieController extends Controller
         ], 201);
     }
 
+
+    /**
+     * remove like/dislike of specified movie.
+     *
+     * @OA\Delete(
+     *      path="/api/movies/{url}/like",
+     *      tags={"movie"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of movie",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="like/dislike deleted",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="validation error",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function destroyLike(DestroyMovieLike $req)
     {
         $validated = $req->validated();
@@ -123,6 +393,63 @@ class MovieController extends Controller
         ], 200);
     }
 
+
+
+    /**
+     * add a person to specified movie.
+     *
+     * @OA\Post(
+     *      path="/api/movies/{url}/people/{person_id}",
+     *      tags={"movie"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of movie",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="person_id",
+     *          in="path",
+     *          description="id of person",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="job",
+     *                      description="job of person in movie",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=201,
+     *          description="person added to movie",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="validation error",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function addPerson(AddPerson $req)
     {
         $validated = $req->validated();
@@ -141,6 +468,67 @@ class MovieController extends Controller
         ], 201);
     }
 
+
+    /**
+     * remove a person to specified movie.
+     *
+     * @OA\Delete(
+     *      path="/api/movies/{url}/people/{person_id}",
+     *      tags={"movie"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of movie",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="person_id",
+     *          in="path",
+     *          description="id of person",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="job",
+     *                      description="job of person in movie",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="person removed from movie",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="person not found",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="person was not in movie as spceified job",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function removePerson(AddPerson $req)
     {
         $validated = $req->validated();
@@ -158,6 +546,53 @@ class MovieController extends Controller
         ], 200);
     }
 
+
+    /**
+     * add a tag to specified movie.
+     *
+     * @OA\Post(
+     *      path="/api/movies/{url}/tags/{name}",
+     *      tags={"movie"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of movie",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="path",
+     *          description="name of tag",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=201,
+     *          description="tag added to movie",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="tag already added to movie",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function addTag(AddTag $req)
     {
         $validated = $req->validated();
@@ -171,6 +606,48 @@ class MovieController extends Controller
         ], 201);
     }
 
+
+    /**
+     * remove tag from specified movie.
+     *
+     * @OA\Delete(
+     *      path="/api/movies/{url}/tags/{name}",
+     *      tags={"movie"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of movie",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="path",
+     *          description="name of tag",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="tag removed from movie",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function removeTag(RemoveTag $req)
     {
         $validated = $req->validated();

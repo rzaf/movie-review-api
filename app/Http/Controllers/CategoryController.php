@@ -165,7 +165,7 @@ class CategoryController extends Controller
      *                  @OA\Property(
      *                      property="new_name",
      *                      description="new name of the category",
-     *                      type="string",
+     *                      type="",
      *                  )
      *              )
      *          )

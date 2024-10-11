@@ -28,15 +28,18 @@ class UserController extends Controller
      *                  type="object",
      *                  @OA\Property(
      *                      property="username",
-     *                      description="username"
+     *                      description="username",
+     *                      default="test"
      *                  ),
      *                  @OA\Property(
      *                      property="password",
-     *                      description="password"
+     *                      description="password",
+     *                      default="1234"
      *                  ),
      *                  @OA\Property(
      *                      property="password_confirmation",
-     *                      description="password_confirmation"
+     *                      description="password_confirmation",
+     *                      default="1234"
      *                  )
      *              )
      *          )

@@ -13,36 +13,17 @@ class AddTag extends FormRequest
      */
     public function authorize(): bool
     {
-        if (auth()->user()->isAdmin()){
+        if (auth()->user()->isAdmin()) {
             return true;
         }
         return false;
     }
 
-    public function all($keys = null)
-	{
-	  $request = parent::all($keys);
-
-	  $request['name'] = $this->route('name');
-
-	  return $request;
-	}
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
-    {
-        return [
-            'name' => 'required|string',
-        ];
-    }
 
     public function validated($key = null, $default = null): array
     {
         $validated = parent::validated();
+        $validated['name'] = $this->route('name');
         $movie = Movie::where(['url' => $this->route('movie_url')])->first('id');
         abort_if($movie == null, 404, 'movie not found');
         $validated['movie_id'] = $movie->id;

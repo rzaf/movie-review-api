@@ -17,6 +17,37 @@ use Illuminate\Http\Request;
 class ReplyController extends Controller
 {
 
+    /**
+     * get replies of specified review.
+     *
+     * @OA\Get(
+     *      path="/api/reviews/{review_id}/replies",
+     *      tags={"reply"},
+     *      @OA\Parameter(
+     *          name="review_id",
+     *          in="path",
+     *          description="id of review",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="perpage",
+     *          in="query",
+     *          description="number of items in a page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=10
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="ok",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function repliesOfReview(Request $req, $reviewId)
     {
         $perpage = intval($req->query('perpage', 10));
@@ -30,6 +61,38 @@ class ReplyController extends Controller
         return ReplyResource::collection($replies);
     }
 
+
+    /**
+     * get replies of specified reply.
+     *
+     * @OA\Get(
+     *      path="/api/replies/{reply_id}/replies",
+     *      tags={"reply"},
+     *      @OA\Parameter(
+     *          name="reply_id",
+     *          in="path",
+     *          description="id of reply",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="perpage",
+     *          in="query",
+     *          description="number of items in a page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=10
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="ok",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function repliesOfReply(Request $req, $replyId)
     {
         $perpage = intval($req->query('perpage', 10));
@@ -43,6 +106,35 @@ class ReplyController extends Controller
         return ReplyResource::collection($replies);
     }
 
+
+    /**
+     * get specified reply.
+     *
+     * @OA\Get(
+     *      path="/api/replies/{id}",
+     *      tags={"reply"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="id of reply",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="reply not found",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="reply found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function show(Request $req, $id)
     {
         $reply = Reply
@@ -60,8 +152,57 @@ class ReplyController extends Controller
         return new ReplyResource($reply);
 
     }
+
+    
     /**
-     * Store a newly created resource in storage.
+     * create a reply.
+     *
+     * @OA\Post(
+     *      path="/api/replies",
+     *      tags={"reply"},
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="text",
+     *                      description="reply text",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="review_id",
+     *                      description="",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="reply_id",
+     *                      description="",
+     *                      default=""
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=201,
+     *          description="reply created",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="validation error",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="movie is already reviewd ",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function store(StoreReply $req)
     {
@@ -74,8 +215,50 @@ class ReplyController extends Controller
         ], 201);
     }
 
+    
     /**
-     * Update the specified resource in storage.
+     * update specified review.
+     *
+     * @OA\Put(
+     *      path="/api/replies/{reply_id}",
+     *      tags={"reply"},
+     *      @OA\Parameter(
+     *          name="reply_id",
+     *          in="path",
+     *          description="id of reply",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="text",
+     *                      description="new reply text",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="reply updated",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="reply not found or not created by user",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function update(UpdateReply $req, string $id)
     {
@@ -95,7 +278,34 @@ class ReplyController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * delete specified reply.
+     *
+     * @OA\Delete(
+     *      path="/api/replies/{reply_id}",
+     *      tags={"reply"},
+     *      @OA\Parameter(
+     *          name="reply_id",
+     *          in="path",
+     *          description="id of reply",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="reply deleted",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="reply not found or not created by user",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function destroy(DestroyReply $req, string $id)
     {
@@ -108,6 +318,50 @@ class ReplyController extends Controller
     }
 
 
+    /**
+     * like/dislike specified reply.
+     *
+     * @OA\Post(
+     *      path="/api/replies/{reply_id}/like",
+     *      tags={"reply"},
+     *      @OA\Parameter(
+     *          name="reply_id",
+     *          in="path",
+     *          description="id of reply",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="is_liked",
+     *                      description="",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=201,
+     *          description="reply liked/disliked",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="reply already liked/disliked",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function storeLike(StoreReplyLike $req)
     {
         $validated = $req->validated();
@@ -121,6 +375,36 @@ class ReplyController extends Controller
         ], 201);
     }
 
+    /**
+     * remove like/dislike from specified reply.
+     *
+     * @OA\Delete(
+     *      path="/api/replies/{reply_id}/like",
+     *      tags={"reply"},
+     *      @OA\Parameter(
+     *          name="reply_id",
+     *          in="path",
+     *          description="id of reply",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="like/dislike deleted",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="reply is not liked/disliked",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function destroyLike(DestroyReplyLike $req)
     {
         $validated = $req->validated();

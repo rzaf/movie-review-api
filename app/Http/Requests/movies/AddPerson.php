@@ -13,20 +13,11 @@ class AddPerson extends FormRequest
      */
     public function authorize(): bool
     {
-        if (auth()->user()->isAdmin()){
+        if (auth()->user()->isAdmin()) {
             return true;
         }
         return false;
     }
-
-    public function all($keys = null)
-	{
-	  $request = parent::all($keys);
-
-	  $request['person_id'] = $this->route('person_id');
-
-	  return $request;
-	}
 
     /**
      * Get the validation rules that apply to the request.
@@ -37,7 +28,6 @@ class AddPerson extends FormRequest
     {
         return [
             'job' => ['required', 'string', Rule::in(['director', 'producer', 'writer', 'actor', 'music'])],
-            'person_id' => 'required|int',
         ];
     }
 
@@ -47,6 +37,7 @@ class AddPerson extends FormRequest
         $movie = Movie::where(['url' => $this->route('movie_url')])->first('id');
         abort_if($movie == null, 404, 'movie not found');
         $validated['movie_id'] = $movie->id;
+        $validated['person_id'] = $this->route('person_id');
         return $validated;
     }
 

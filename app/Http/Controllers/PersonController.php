@@ -16,7 +16,35 @@ use Illuminate\Http\Request;
 class PersonController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * get people.
+     *
+     * @OA\Get(
+     *      path="/api/people",
+     *      tags={"person"},
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="number of page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="perpage",
+     *          in="query",
+     *          description="number of items in a page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=10
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="ok",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function index(Request $req)
     {
@@ -27,7 +55,49 @@ class PersonController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * create new person.
+     *
+     * @OA\Post(
+     *      path="/api/people",
+     *      tags={"person"},
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="name",
+     *                      description="name of person",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="is_male",
+     *                      description="gender of person",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="birth_date",
+     *                      description="birth_date of person",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="person created",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="validation error",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function store(StorePerson $req)
     {
@@ -39,10 +109,36 @@ class PersonController extends Controller
         ], 201);
     }
 
+    
     /**
-     * Display the specified resource.
+     * get specified person.
+     *
+     * @OA\Get(
+     *      path="/api/people/{id}",
+     *      tags={"person"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="id of person",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="person not found",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="person found",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
-    public function show(int $id)
+    public function show(string $id)
     {
         $person = Person
             ::withCount('followers')
@@ -52,7 +148,35 @@ class PersonController extends Controller
         return new PersonResource($person);
     }
 
-    public function personMovies(int $id)
+    /**
+     * get movies of specified person.
+     *
+     * @OA\Get(
+     *      path="/api/people/{id}/movies",
+     *      tags={"person"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="id of person",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="person not found",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="person found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function personMovies(string $id)
     {
         $person = Person
             ::with(['moviesWorkedIn'])
@@ -64,8 +188,56 @@ class PersonController extends Controller
         return new PersonResource($person);
     }
 
+    
     /**
-     * Update the specified resource in storage.
+     * update specified person.
+     *
+     * @OA\Put(
+     *      path="/api/people/{id}",
+     *      tags={"person"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="id of person",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\RequestBody(
+     *          description="request body",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="name",
+     *                      description="new name of person",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="birth_date",
+     *                      description="new birth_date of person",
+     *                      default=""
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="person updated",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="person not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function update(UpdatePerson $req)
     {
@@ -77,8 +249,37 @@ class PersonController extends Controller
         ], 200);
     }
 
+    
     /**
-     * Remove the specified resource from storage.
+     * delete specified person.
+     *
+     * @OA\Delete(
+     *      path="/api/people/{id}",
+     *      tags={"person"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="id of person",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="person deleted",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="person not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
      */
     public function destroy(DestroyPerson $req)
     {
@@ -90,6 +291,43 @@ class PersonController extends Controller
     }
 
 
+    
+    /**
+     * follow specified person.
+     *
+     * @OA\Post(
+     *      path="/api/people/{id}/following",
+     *      tags={"person"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="id of person",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="person followed",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="person already followed",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="person not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function storeFollowing(Request $req)
     {
         try {
@@ -109,6 +347,38 @@ class PersonController extends Controller
         ], 200);
     }
 
+
+    /**
+     * follow specified person.
+     *
+     * @OA\Delete(
+     *      path="/api/people/{id}/following",
+     *      tags={"person"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="id of person",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="person unfollowed",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="person not found or not followed",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
     public function destroyFollowing(Request $req)
     {
         $ok = Following::where([

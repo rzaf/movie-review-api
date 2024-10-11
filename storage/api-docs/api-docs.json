@@ -156,7 +156,7 @@
                                 "properties": {
                                     "new_name": {
                                         "description": "new name of the category",
-                                        "type": "string"
+                                        "type": ""
                                     }
                                 },
                                 "type": "object"
@@ -247,6 +247,1734 @@
                 ]
             }
         },
+        "/api/movies": {
+            "get": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "get movies.",
+                "operationId": "a7859dc5cd106bbeae5492e22df893ec",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "perpage",
+                        "in": "query",
+                        "description": "number of items in a page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "create new movie.",
+                "operationId": "a303e8fe5382b02a193fa994ebef739f",
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "name of movie",
+                                        "default": ""
+                                    },
+                                    "url": {
+                                        "description": "url of movie",
+                                        "default": ""
+                                    },
+                                    "release_year": {
+                                        "description": "release_year of movie",
+                                        "default": ""
+                                    },
+                                    "category_name": {
+                                        "description": "category_name of movie",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "movie created",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/{url}": {
+            "get": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "get specified movie.",
+                "operationId": "59619eb0ecc1e69b8c3784c805b62e20",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "movie not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "movie found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "update specified category.",
+                "operationId": "9daea65b8365189d94cd402e1f554275",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "new name of movie",
+                                        "default": ""
+                                    },
+                                    "url": {
+                                        "description": "new url of movie",
+                                        "default": ""
+                                    },
+                                    "release_year": {
+                                        "description": "new release_year of movie",
+                                        "default": ""
+                                    },
+                                    "category_name": {
+                                        "description": "new category_name of movie",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "movie updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "movie not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "delete specified category.",
+                "operationId": "24d3d14745a4fd827313d3e7e20998d9",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "movie deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "movie not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/{url}/like": {
+            "post": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "like/dislike specified movie.",
+                "operationId": "246154aa7162b2db9369584a08193410",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "is_liked": {
+                                        "description": "liking or disliking movie",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "like/dislike created",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "remove like/dislike of specified movie.",
+                "operationId": "1839878444d843d23a1a88a58945272e",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "like/dislike deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/{url}/people/{person_id}": {
+            "post": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "add a person to specified movie.",
+                "operationId": "41b9cb686d2efd2ec0386adc5aed031c",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "person_id",
+                        "in": "path",
+                        "description": "id of person",
+                        "required": true,
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "job": {
+                                        "description": "job of person in movie",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "person added to movie",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "remove a person to specified movie.",
+                "operationId": "b5b009bce0df1ad462110a6465405e61",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "person_id",
+                        "in": "path",
+                        "description": "id of person",
+                        "required": true,
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "job": {
+                                        "description": "job of person in movie",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "person removed from movie",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "person not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "person was not in movie as spceified job",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/{url}/tags/{name}": {
+            "post": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "add a tag to specified movie.",
+                "operationId": "ddc84874d898267d4699fa36f49109d0",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of tag",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "tag added to movie",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "tag already added to movie",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "remove tag from specified movie.",
+                "operationId": "f66fe95e34095bbd94dd636668aafab1",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of tag",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "tag removed from movie",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/people": {
+            "get": {
+                "tags": [
+                    "person"
+                ],
+                "summary": "get people.",
+                "operationId": "b2985cc1b5ff63acae04676e8de27da8",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "perpage",
+                        "in": "query",
+                        "description": "number of items in a page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "person"
+                ],
+                "summary": "create new person.",
+                "operationId": "209c4a23e6aa244623d8a2a3a548f25b",
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "name of person",
+                                        "default": ""
+                                    },
+                                    "is_male": {
+                                        "description": "gender of person",
+                                        "default": ""
+                                    },
+                                    "birth_date": {
+                                        "description": "birth_date of person",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "person created",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/people/{id}": {
+            "get": {
+                "tags": [
+                    "person"
+                ],
+                "summary": "get specified person.",
+                "operationId": "42f95ecf49b24da95843e43c429864ab",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of person",
+                        "required": true,
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "person not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "person found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "person"
+                ],
+                "summary": "update specified person.",
+                "operationId": "adbf7ab6502ba622e14ffb6096ed7fe7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of person",
+                        "required": true,
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "new name of person",
+                                        "default": ""
+                                    },
+                                    "birth_date": {
+                                        "description": "new birth_date of person",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "person updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "person not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "person"
+                ],
+                "summary": "delete specified person.",
+                "operationId": "201d5ffb55c341d735d3fc6a8f8dccc3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of person",
+                        "required": true,
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "person deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "person not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/people/{id}/movies": {
+            "get": {
+                "tags": [
+                    "person"
+                ],
+                "summary": "get movies of specified person.",
+                "operationId": "4ead14e30d8c6bcf49f31bb12a7407c7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of person",
+                        "required": true,
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "person not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "person found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/people/{id}/following": {
+            "post": {
+                "tags": [
+                    "person"
+                ],
+                "summary": "follow specified person.",
+                "operationId": "edb2144b1ecdb79bea39292cac37b0ae",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of person",
+                        "required": true,
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "person followed",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "person already followed",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "person not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "person"
+                ],
+                "summary": "follow specified person.",
+                "operationId": "0081d60529f547fa0b22c40824809433",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of person",
+                        "required": true,
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "person unfollowed",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "person not found or not followed",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/reviews/{review_id}/replies": {
+            "get": {
+                "tags": [
+                    "reply"
+                ],
+                "summary": "get replies of specified review.",
+                "operationId": "d2c28eab55736f1695ab7b226024dbd8",
+                "parameters": [
+                    {
+                        "name": "review_id",
+                        "in": "path",
+                        "description": "id of review",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "perpage",
+                        "in": "query",
+                        "description": "number of items in a page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/replies/{reply_id}/replies": {
+            "get": {
+                "tags": [
+                    "reply"
+                ],
+                "summary": "get replies of specified reply.",
+                "operationId": "a3b1d3a700976b57cbb9fce32a40fba8",
+                "parameters": [
+                    {
+                        "name": "reply_id",
+                        "in": "path",
+                        "description": "id of reply",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "perpage",
+                        "in": "query",
+                        "description": "number of items in a page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/replies/{id}": {
+            "get": {
+                "tags": [
+                    "reply"
+                ],
+                "summary": "get specified reply.",
+                "operationId": "727571e68be10d3a0af0ea4968e2cbdf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of reply",
+                        "required": true,
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "reply not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "reply found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/replies": {
+            "post": {
+                "tags": [
+                    "reply"
+                ],
+                "summary": "create a reply.",
+                "operationId": "f988880d3d29547742972a3783101a60",
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "text": {
+                                        "description": "reply text",
+                                        "default": ""
+                                    },
+                                    "review_id": {
+                                        "description": "",
+                                        "default": ""
+                                    },
+                                    "reply_id": {
+                                        "description": "",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "reply created",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "movie is already reviewd ",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/replies/{reply_id}": {
+            "put": {
+                "tags": [
+                    "reply"
+                ],
+                "summary": "update specified review.",
+                "operationId": "9762d79e42d3af7ad8100a3c9e843e9f",
+                "parameters": [
+                    {
+                        "name": "reply_id",
+                        "in": "path",
+                        "description": "id of reply",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "text": {
+                                        "description": "new reply text",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "reply updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "reply not found or not created by user",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "reply"
+                ],
+                "summary": "delete specified reply.",
+                "operationId": "1bf64db999118ea1802bb9b521f5426f",
+                "parameters": [
+                    {
+                        "name": "reply_id",
+                        "in": "path",
+                        "description": "id of reply",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "reply deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "reply not found or not created by user",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/replies/{reply_id}/like": {
+            "post": {
+                "tags": [
+                    "reply"
+                ],
+                "summary": "like/dislike specified reply.",
+                "operationId": "109f20f534a43b54c44ec6a8a94b98eb",
+                "parameters": [
+                    {
+                        "name": "reply_id",
+                        "in": "path",
+                        "description": "id of reply",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "is_liked": {
+                                        "description": "",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "reply liked/disliked",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "reply already liked/disliked",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "reply"
+                ],
+                "summary": "remove like/dislike from specified reply.",
+                "operationId": "590c0470a634d42d92ccc41a8de2d011",
+                "parameters": [
+                    {
+                        "name": "reply_id",
+                        "in": "path",
+                        "description": "id of reply",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "like/dislike deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "reply is not liked/disliked",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/{movie_url}/reviews": {
+            "get": {
+                "tags": [
+                    "review"
+                ],
+                "summary": "get reviews of specefied movie.",
+                "operationId": "8380d50280ddd74477c73e5c3c6056ef",
+                "parameters": [
+                    {
+                        "name": "movie_url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "perpage",
+                        "in": "query",
+                        "description": "number of items in a page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "review"
+                ],
+                "summary": "create a review.",
+                "operationId": "cd94e34491583ace7fc4bbbd2cf28e60",
+                "parameters": [
+                    {
+                        "name": "movie_url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "review": {
+                                        "description": "review text",
+                                        "default": ""
+                                    },
+                                    "score": {
+                                        "description": "integer between 0,100",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "review created",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "movie is already reviewd ",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/reviews/{id}": {
+            "get": {
+                "tags": [
+                    "review"
+                ],
+                "summary": "get specified review.",
+                "operationId": "a9949d3a965ed93ae30547c07eef7505",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of review",
+                        "required": true,
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "review not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "review found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/reviews/{review_id}": {
+            "put": {
+                "tags": [
+                    "review"
+                ],
+                "summary": "update specified review.",
+                "operationId": "3ce2173f9fd4ec1ace584902c213f48b",
+                "parameters": [
+                    {
+                        "name": "review_id",
+                        "in": "path",
+                        "description": "id of review",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "review": {
+                                        "description": "new review text",
+                                        "default": ""
+                                    },
+                                    "score": {
+                                        "description": "new score: integer between 0,100",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "review updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "review not found or not created by user ",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "review"
+                ],
+                "summary": "delete specified review.",
+                "operationId": "8ee3c7225c010f99d60267d72118defe",
+                "parameters": [
+                    {
+                        "name": "review_id",
+                        "in": "path",
+                        "description": "id of review",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "review deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "review not found or not created by user ",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/reviews/{review_id}/like": {
+            "post": {
+                "tags": [
+                    "review"
+                ],
+                "summary": "like/dislike specified review.",
+                "operationId": "3113e2af75bf70c2643eb3055112fe72",
+                "parameters": [
+                    {
+                        "name": "review_id",
+                        "in": "path",
+                        "description": "id of review",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "is_liked": {
+                                        "description": "",
+                                        "default": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "review liked/disliked",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "review already liked/disliked",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "review"
+                ],
+                "summary": "remove like/dislike from specified review.",
+                "operationId": "00f017f89c0b607eb9a2b6da2ee0b732",
+                "parameters": [
+                    {
+                        "name": "review_id",
+                        "in": "path",
+                        "description": "id of review",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "like/dislike deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "review is not liked/disliked",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
@@ -261,13 +1989,16 @@
                             "schema": {
                                 "properties": {
                                     "username": {
-                                        "description": "username"
+                                        "description": "username",
+                                        "default": "test"
                                     },
                                     "password": {
-                                        "description": "password"
+                                        "description": "password",
+                                        "default": "1234"
                                     },
                                     "password_confirmation": {
-                                        "description": "password_confirmation"
+                                        "description": "password_confirmation",
+                                        "default": "1234"
                                     }
                                 },
                                 "type": "object"
@@ -538,6 +2269,22 @@
         {
             "name": "category",
             "description": "categories"
+        },
+        {
+            "name": "movie",
+            "description": "movie"
+        },
+        {
+            "name": "person",
+            "description": "person"
+        },
+        {
+            "name": "reply",
+            "description": "reply"
+        },
+        {
+            "name": "review",
+            "description": "review"
         },
         {
             "name": "login",
