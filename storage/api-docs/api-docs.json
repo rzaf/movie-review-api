@@ -1,0 +1,551 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "movie-reviews-api",
+        "description": "API documentation movie-reviews-api",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/": {},
+        "/api/categories": {
+            "get": {
+                "tags": [
+                    "category"
+                ],
+                "summary": "get categories.",
+                "operationId": "3f5817a34833d0a1f4af4548dd3aeaba",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "perpage",
+                        "in": "query",
+                        "description": "number of items in a page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "category"
+                ],
+                "summary": "create new category.",
+                "operationId": "71fcad552bb0eaba9fb191fd8d8dcab0",
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "name of category",
+                                        "default": "new name"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "category created",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/categories/{name}": {
+            "get": {
+                "tags": [
+                    "category"
+                ],
+                "summary": "get specified category.",
+                "operationId": "910ebc3ffdf9a4b38b8b7ecd5b69ab48",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of category",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "category found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "category"
+                ],
+                "summary": "update specified category.",
+                "operationId": "70a3200a93cd10f91dcc88d72351ecee",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of category",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "new_name": {
+                                        "description": "new name of the category",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "category updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "category"
+                ],
+                "summary": "remove specified category.",
+                "operationId": "c65fa4a9231636b7429635ec02e55c30",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of category",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "category deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "login"
+                ],
+                "summary": "login account to get new token.",
+                "operationId": "0fc9610184083ac6dddab2c63139225a",
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "description": "username"
+                                    },
+                                    "password": {
+                                        "description": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "description": "password_confirmation"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "invalid username or password",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "create new user.",
+                "operationId": "592819a0265360b2014512d6dbfaf0e7",
+                "requestBody": {
+                    "description": "request body",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "name"
+                                    },
+                                    "username": {
+                                        "description": "username"
+                                    },
+                                    "email": {
+                                        "description": "email"
+                                    },
+                                    "password": {
+                                        "description": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "description": "password_confirmation"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "invalid username or password",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{username}": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "get specified user.",
+                "operationId": "e93fae3feb7e463d324198c65a9bcdc7",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "name of username",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "user not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "user found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "update specified user.",
+                "operationId": "b12b8c5ea28ddb22d70c8d9700e56402",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "name of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "new_name": {
+                                        "description": "new name",
+                                        "type": "string"
+                                    },
+                                    "new_username": {
+                                        "description": "new username"
+                                    },
+                                    "new_email": {
+                                        "description": "new email"
+                                    },
+                                    "new_password": {
+                                        "description": "new password"
+                                    },
+                                    "new_password_confirmation": {
+                                        "description": "new password_confirmation"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "user updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "user not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "update specified user.",
+                "operationId": "9c4ce10054c86ab82451314649d960e7",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "name of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "user not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearer": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "category",
+            "description": "categories"
+        },
+        {
+            "name": "login",
+            "description": "login"
+        },
+        {
+            "name": "user",
+            "description": "user"
+        }
+    ]
+}
