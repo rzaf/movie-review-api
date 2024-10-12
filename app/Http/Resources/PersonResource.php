@@ -15,36 +15,21 @@ class PersonResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $arr = [
+        return [
             'id' => $this->id,
             'name' => $this->name,
+            'age' => $this->whenHas('birth_date', function () {
+                return Carbon::parse($this->birth_date)->age;
+            }),
+            'gender' => $this->whenHas('is_male', function () {
+                return $this->is_male ? 'male' : 'female';
+            }),
+            'movies' => MovieResource::collection($this->whenLoaded('moviesWorkedIn')),
+            'followers_count' => $this->whenCounted('followers'),
+            'movies_count' => $this->whenCounted('movies'),
+            'worked_as' => $this->whenPivotLoaded('movie_actors', function () {
+                return $this->pivot->job;
+            }),
         ];
-
-        if (isset($this->followers_count)) {
-            $arr['followers_count'] = $this->followers_count;
-        }
-
-        if (isset($this->birth_date)) {
-            $arr['age'] = Carbon::parse($this->birth_date)->age;
-        }
-
-        if (isset($this->is_male)) {
-            $arr['gender'] = ($this->is_male ? 'male' : 'female');
-        }
-
-        if (isset($this->movies_count)) {
-            $arr['movies_count'] = $this->movies_count;
-        }
-
-        if (isset($this->pivot)) {
-            $arr['job'] = $this->pivot->job;
-        }
-
-        if ($this->relationLoaded('moviesWorkedIn')) {
-            $arr['movies'] = MovieResource::collection($this->moviesWorkedIn);
-        }
-
-        return $arr;
-        // return parent::toArray($request);
     }
 }

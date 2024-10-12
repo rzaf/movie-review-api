@@ -14,42 +14,30 @@ class MovieResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $arr = [
+        return [
             'name' => $this->name,
             'url' => $this->url,
             'release_year' => $this->release_year,
+            'category_name' => $this->whenLoaded('category', function () {
+                return $this->category->name;
+            }),
+            'staff' => PersonResource::collection($this->whenLoaded('staff')),
+            'likes_count' => $this->whenCounted('likes'),
+            'dislikes_count' => $this->whenCounted('dislikes'),
+            // 'tags' => $this->whenAggregated('tags', 'name', 'group_concat'),
+            'tags' => $this->whenHas('tags_group_concat_name', function () {
+                return $this->tags_group_concat_name ?? '';
+            }),
+            'worked_as' => $this->whenPivotLoaded('movie_actors', function () {
+                return $this->pivot->job;
+            }),
+            'reviews_count' => $this->whenCounted('reviews'),
+            'average_score' => $this->whenHas('reviews_avg_score', function () {
+                if (isset($this->reviews_count) && $this->reviews_count == 0) {
+                    return null;
+                }
+                return number_format($this->reviews_avg_score / 10, 2);
+            }),
         ];
-
-        if ($this->relationLoaded('category')) {
-            $arr['category'] = $this->category->name;
-        }
-        if (isset($this->reviews_avg_score)) {
-            $arr['average_score'] = $this->reviews_avg_score / 10;
-        }
-        if (isset($this->reviews_count)) {
-            $arr['reviews_count'] = $this->reviews_count;
-            if ($this->reviews_count == 0) {
-                $arr['average_score'] = null;
-            }
-        }
-        if ($this->relationLoaded('staff')) {
-            $arr['staff'] = PersonResource::collection($this->staff);
-        }
-        if (isset($this->tags_group_concat_name)) {
-            $arr['tags'] = $this->tags_group_concat_name;
-        }
-
-        if (isset($this->likes_count)) {
-            $arr['likes_count'] = $this->likes_count;
-        }
-        if (isset($this->dislikes_count)) {
-            $arr['dislikes_count'] = $this->dislikes_count;
-        }
-
-        if (isset($this->pivot)) {
-            $arr['job'] = $this->pivot->job;
-        }
-
-        return $arr;
     }
 }

@@ -14,42 +14,20 @@ class ReplyResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $arr = [
+        return [
             'id' => $this->id,
             'text' => $this->text,
+            'review_id' => $this->whenHas('review_id'),
+            'reply_id' => $this->whenHas('reply_id'),
+            'replier_username' => $this->whenLoaded('user', function () {
+                return $this->user->name;
+            }),
+            'replied_to_review' => new ReviewResource($this->whenLoaded('review')),
+            'replied_to_reply' => new ReplyResource($this->whenLoaded('reply')),
+
+            'replies_count' => $this->whenCounted('replies'),
+            'likes_count' => $this->whenCounted('likes'),
+            'dislikes_count' => $this->whenCounted('dislikes'),
         ];
-        if (isset($this->review_id)) {
-            $arr['review_id'] = $this->review_id;
-        }
-        if (isset($this->reply_id)) {
-            $arr['reply_id'] = $this->reply_id;
-        }
-
-
-        if ($this->relationLoaded('review')) {
-            if (isset($this->review)) {
-                $arr['replied_to_review'] = new ReviewResource($this->review);
-            }
-        }
-        if ($this->relationLoaded('reply')) {
-            if (isset($this->reply)) {
-                $arr['replied_to_reply'] = new ReplyResource($this->reply);
-            }
-        }
-
-
-        if ($this->relationLoaded('user')) {
-            $arr['replier_username'] = $this->user->name;
-        }
-        if (isset($this->replies_count)) {
-            $arr['replies_count'] = $this->replies_count;
-        }
-        if (isset($this->likes_count)) {
-            $arr['likes_count'] = $this->likes_count;
-        }
-        if (isset($this->dislikes_count)) {
-            $arr['dislikes_count'] = $this->dislikes_count;
-        }
-        return $arr;
     }
 }
