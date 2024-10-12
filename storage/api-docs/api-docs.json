@@ -1252,6 +1252,15 @@
                         }
                     },
                     {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
                         "name": "perpage",
                         "in": "query",
                         "description": "number of items in a page",
@@ -1285,6 +1294,15 @@
                         "name": "reply_id",
                         "in": "path",
                         "description": "id of reply",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
                         "schema": {
                             "format": "int64",
                             "default": 1

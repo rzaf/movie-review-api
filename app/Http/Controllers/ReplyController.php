@@ -33,6 +33,15 @@ class ReplyController extends Controller
      *          )
      *      ),
      *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="number of page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
      *          name="perpage",
      *          in="query",
      *          description="number of items in a page",
@@ -72,6 +81,15 @@ class ReplyController extends Controller
      *          name="reply_id",
      *          in="path",
      *          description="id of reply",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="number of page",
      *          @OA\Schema(
      *              format="int64",
      *              default=1
