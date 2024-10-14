@@ -63,7 +63,58 @@ class MovieController extends Controller
             ->paginate($perpage));
     }
 
-    
+    /**
+     * search movies.
+     *
+     * @OA\Get(
+     *      path="/api/movies/search/{search_term}",
+     *      tags={"movie"},
+     *      @OA\Parameter(
+     *          name="search_term",
+     *          in="path",
+     *          description="search_term",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="number of page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="perpage",
+     *          in="query",
+     *          description="number of items in a page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=10
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="ok",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function search(Request $req, string $term)
+    {
+        $perpage = intval($req->query('perpage', 10));
+        return MovieResource::collection(Movie
+            ::withAvg('reviews', 'score')
+            ->withCount('likes')
+            ->withCount('dislikes')
+            ->withCount('reviews')
+            ->whereLike('name', "%$term%")
+            ->paginate($perpage));
+    }
+
     /**
      * create new movie.
      *

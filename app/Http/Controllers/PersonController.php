@@ -55,6 +55,55 @@ class PersonController extends Controller
     }
 
     /**
+     * search people.
+     *
+     * @OA\Get(
+     *      path="/api/people/search/{search_term}",
+     *      tags={"person"},
+     *      @OA\Parameter(
+     *          name="search_term",
+     *          in="path",
+     *          description="search_term",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="number of page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="perpage",
+     *          in="query",
+     *          description="number of items in a page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=10
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="ok",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function search(Request $req, string $term)
+    {
+        $perpage = intval($req->query('perpage', 10));
+        return PersonResource::collection(Person
+            ::withCount('followers')
+            ->whereLike('name', "%$term%")
+            ->paginate($perpage));
+    }
+
+    /**
      * create new person.
      *
      * @OA\Post(
@@ -109,7 +158,7 @@ class PersonController extends Controller
         ], 201);
     }
 
-    
+
     /**
      * get specified person.
      *
@@ -188,7 +237,7 @@ class PersonController extends Controller
         return new PersonResource($person);
     }
 
-    
+
     /**
      * update specified person.
      *
@@ -249,7 +298,7 @@ class PersonController extends Controller
         ], 200);
     }
 
-    
+
     /**
      * delete specified person.
      *
@@ -291,7 +340,7 @@ class PersonController extends Controller
     }
 
 
-    
+
     /**
      * follow specified person.
      *

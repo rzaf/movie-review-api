@@ -71,7 +71,71 @@ class ReviewController extends Controller
             ->paginate($perpage));
     }
 
-    
+
+    /**
+     * search reviews of specefied movie.
+     *
+     * @OA\Get(
+     *      path="/api/movies/{movie_url}/reviews/search/{search_term}",
+     *      tags={"review"},
+     *      @OA\Parameter(
+     *          name="movie_url",
+     *          in="path",
+     *          description="url of movie",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="search_term",
+     *          in="path",
+     *          description="search_term",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="number of page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="perpage",
+     *          in="query",
+     *          description="number of items in a page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=10
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="ok",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function search(Request $req, string $url, string $term)
+    {
+        $movie = Movie::where(['url' => $url])->first('id');
+        abort_if($movie == null, 404, 'movie not found');
+        $perpage = intval($req->query('perpage', 10));
+        return ReviewResource::collection(Review
+            ::where(['movie_id' => $movie->id])
+            ->with(['user'])
+            ->withCount('replies')
+            ->withCount('likes')
+            ->withCount('dislikes')
+            ->whereLike('review', "%$term%")
+            ->paginate($perpage));
+    }
+
 
     /**
      * create a review.
@@ -182,7 +246,7 @@ class ReviewController extends Controller
         return new ReviewResource($review);
     }
 
-    
+
     /**
      * update specified review.
      *
@@ -340,7 +404,7 @@ class ReviewController extends Controller
             Like::create($validated);
         } catch (UniqueConstraintViolationException $e) {
             abort(400, 'review already liked/disliked');
-        } 
+        }
         return response([
             'message' => 'like/dislike created',
         ], 201);

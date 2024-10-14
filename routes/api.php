@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
-// use App\Models\Category;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ReplyController;
@@ -26,6 +25,7 @@ Route::delete('/users/{username}', [UserController::class, 'destroy'])->middlewa
 // Route::apiResource('/categories', CategoryController::class);
 Route::post('/categories', [CategoryController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/search/{term}', [CategoryController::class, 'search']);
 Route::get('/categories/{name}', [CategoryController::class, 'show']);
 Route::put('/categories/{name}', [CategoryController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/categories/{name}', [CategoryController::class, 'destroy'])->middleware('auth:sanctum');
@@ -33,6 +33,7 @@ Route::delete('/categories/{name}', [CategoryController::class, 'destroy'])->mid
 // Route::apiResource('/people', PersonController::class);
 Route::post('/people', [PersonController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/people', [PersonController::class, 'index']);
+Route::get('/people/search/{term}', [PersonController::class, 'search']);
 Route::get('/people/{id}/movies', [PersonController::class, 'personMovies']);
 Route::get('/people/{id}', [PersonController::class, 'show']);
 Route::put('/people/{id}', [PersonController::class, 'update'])->middleware('auth:sanctum');
@@ -44,6 +45,7 @@ Route::delete('/people/{id}/following', [PersonController::class, 'destroyFollow
 //// movies
 Route::post('/movies', [MovieController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/movies', [MovieController::class, 'index']);
+Route::get('/movies/search/{term}', [MovieController::class, 'search']);
 Route::get('/movies/{url}', [MovieController::class, 'show']);
 Route::put('/movies/{url}', [MovieController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/movies/{url}', [MovieController::class, 'destroy'])->middleware('auth:sanctum');
@@ -62,6 +64,7 @@ Route::get('/reviews/{review_id}', [ReviewController::class, 'show']);
 Route::delete('/reviews/{review_id}', [ReviewController::class, 'destroy'])->middleware('auth:sanctum');
 Route::put('/reviews/{review_id}', [ReviewController::class, 'update'])->middleware('auth:sanctum');
 Route::get('/movies/{movie_url}/reviews', [ReviewController::class, 'index']);
+Route::get('/movies/{movie_url}/reviews/search/{term}', [ReviewController::class, 'search']);
 Route::post('/movies/{movie_url}/reviews', [ReviewController::class, 'store'])->middleware('auth:sanctum');
 
 Route::post('/reviews/{review_id}/like', [ReviewController::class, 'storeLike'])->middleware('auth:sanctum');

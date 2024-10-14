@@ -92,6 +92,54 @@
                 ]
             }
         },
+        "/api/categories/search/{search_term}": {
+            "get": {
+                "tags": [
+                    "category"
+                ],
+                "summary": "search categories.",
+                "operationId": "f3f600f9d63fe70ca0116d4b3f6373bd",
+                "parameters": [
+                    {
+                        "name": "search_term",
+                        "in": "path",
+                        "description": "search_term",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "perpage",
+                        "in": "query",
+                        "description": "number of items in a page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/categories/{name}": {
             "get": {
                 "tags": [
@@ -342,6 +390,54 @@
                         "bearer": []
                     }
                 ]
+            }
+        },
+        "/api/movies/search/{search_term}": {
+            "get": {
+                "tags": [
+                    "movie"
+                ],
+                "summary": "search movies.",
+                "operationId": "e95d40eecbae6789daf9f2a0903aef3d",
+                "parameters": [
+                    {
+                        "name": "search_term",
+                        "in": "path",
+                        "description": "search_term",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "perpage",
+                        "in": "query",
+                        "description": "number of items in a page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/movies/{url}": {
@@ -956,6 +1052,54 @@
                         "bearer": []
                     }
                 ]
+            }
+        },
+        "/api/people/search/{search_term}": {
+            "get": {
+                "tags": [
+                    "person"
+                ],
+                "summary": "search people.",
+                "operationId": "a5b6b928491f012e0daf7dcbc3e992dd",
+                "parameters": [
+                    {
+                        "name": "search_term",
+                        "in": "path",
+                        "description": "search_term",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "perpage",
+                        "in": "query",
+                        "description": "number of items in a page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/people/{id}": {
@@ -1748,6 +1892,63 @@
                         "bearer": []
                     }
                 ]
+            }
+        },
+        "/api/movies/{movie_url}/reviews/search/{search_term}": {
+            "get": {
+                "tags": [
+                    "review"
+                ],
+                "summary": "search reviews of specefied movie.",
+                "operationId": "915819f42515d913a7a2cd608a77840a",
+                "parameters": [
+                    {
+                        "name": "movie_url",
+                        "in": "path",
+                        "description": "url of movie",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "search_term",
+                        "in": "path",
+                        "description": "search_term",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "perpage",
+                        "in": "query",
+                        "description": "number of items in a page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/reviews/{id}": {
