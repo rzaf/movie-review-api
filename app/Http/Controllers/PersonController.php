@@ -39,6 +39,16 @@ class PersonController extends Controller
      *              default=10
      *          )
      *      ),
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="sort by",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"newest-created","oldest-created","youngest","oldest","most-followers","least-followers","most-movies","least-movies"},
+     *              default=""
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="ok",
@@ -51,6 +61,8 @@ class PersonController extends Controller
         $perpage = intval($req->query('perpage', 10));
         return PersonResource::collection(Person
             ::withCount('followers')
+            ->withCount('movies')
+            ->sortBy($req->query('sort'))
             ->paginate($perpage));
     }
 
@@ -87,6 +99,16 @@ class PersonController extends Controller
      *              default=10
      *          )
      *      ),
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="sort by",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"newest-created","oldest-created","youngest","oldest","most-followers","least-followers","most-movies","least-movies"},
+     *              default=""
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="ok",
@@ -99,7 +121,9 @@ class PersonController extends Controller
         $perpage = intval($req->query('perpage', 10));
         return PersonResource::collection(Person
             ::withCount('followers')
+            ->withCount('movies')
             ->whereLike('name', "%$term%")
+            ->sortBy($req->query('sort'))
             ->paginate($perpage));
     }
 

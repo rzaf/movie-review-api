@@ -45,6 +45,16 @@ class MovieController extends Controller
      *              default=10
      *          )
      *      ),
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="sort by",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"newest","oldest","newest-release","oldest-release","most-likes","least-likes","most-dislikes","least-dislikes","most-reviews","least-reviews","best-reviewed","worst-reviewed"},
+     *              default=""
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="ok",
@@ -60,6 +70,7 @@ class MovieController extends Controller
             ->withCount('likes')
             ->withCount('dislikes')
             ->withCount('reviews')
+            ->sortBy($req->query('sort'))
             ->paginate($perpage));
     }
 
@@ -96,6 +107,16 @@ class MovieController extends Controller
      *              default=10
      *          )
      *      ),
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="sort by",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"newest","oldest","newest-release","oldest-release","most-likes","least-likes","most-dislikes","least-dislikes","most-reviews","least-reviews","best-reviewed","worst-reviewed"},
+     *              default=""
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="ok",
@@ -112,7 +133,8 @@ class MovieController extends Controller
             ->withCount('dislikes')
             ->withCount('reviews')
             ->whereLike('name', "%$term%")
-            ->paginate($perpage));
+            ->sortBy($req->query('sort'))
+            ->paginate($perpage));;
     }
 
     /**

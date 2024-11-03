@@ -50,6 +50,16 @@ class ReplyController extends Controller
      *              default=10
      *          )
      *      ),
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="sort by",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"newest","oldest","most-likes","least-likes","most-dislikes","least-dislikes","most-replies","least-replies"},
+     *              default=""
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="ok",
@@ -66,6 +76,7 @@ class ReplyController extends Controller
             ->withCount('replies')
             ->withCount('likes')
             ->withCount('dislikes')
+            ->sortBy($req->query('sort'))
             ->paginate($perpage);
         return ReplyResource::collection($replies);
     }
@@ -104,6 +115,16 @@ class ReplyController extends Controller
      *              default=10
      *          )
      *      ),
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="sort by",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"newest","oldest","most-likes","least-likes","most-dislikes","least-dislikes","most-replies","least-replies"},
+     *              default=""
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="ok",
@@ -120,6 +141,7 @@ class ReplyController extends Controller
             ->withCount('replies')
             ->withCount('likes')
             ->withCount('dislikes')
+            ->sortBy($req->query('sort'))
             ->paginate($perpage);
         return ReplyResource::collection($replies);
     }

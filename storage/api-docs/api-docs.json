@@ -32,6 +32,21 @@
                             "format": "int64",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "sort by",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "newest",
+                                "oldest",
+                                "most-movies",
+                                "least-movies"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -125,6 +140,21 @@
                         "schema": {
                             "format": "int64",
                             "default": 10
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "sort by",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "newest",
+                                "oldest",
+                                "most-movies",
+                                "least-movies"
+                            ]
                         }
                     }
                 ],
@@ -320,6 +350,29 @@
                             "format": "int64",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "sort by",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "newest",
+                                "oldest",
+                                "newest-release",
+                                "oldest-release",
+                                "most-likes",
+                                "least-likes",
+                                "most-dislikes",
+                                "least-dislikes",
+                                "most-reviews",
+                                "least-reviews",
+                                "best-reviewed",
+                                "worst-reviewed"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -425,6 +478,29 @@
                         "schema": {
                             "format": "int64",
                             "default": 10
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "sort by",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "newest",
+                                "oldest",
+                                "newest-release",
+                                "oldest-release",
+                                "most-likes",
+                                "least-likes",
+                                "most-dislikes",
+                                "least-dislikes",
+                                "most-reviews",
+                                "least-reviews",
+                                "best-reviewed",
+                                "worst-reviewed"
+                            ]
                         }
                     }
                 ],
@@ -986,6 +1062,25 @@
                             "format": "int64",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "sort by",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "newest-created",
+                                "oldest-created",
+                                "youngest",
+                                "oldest",
+                                "most-followers",
+                                "least-followers",
+                                "most-movies",
+                                "least-movies"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -1087,6 +1182,25 @@
                         "schema": {
                             "format": "int64",
                             "default": 10
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "sort by",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "newest-created",
+                                "oldest-created",
+                                "youngest",
+                                "oldest",
+                                "most-followers",
+                                "least-followers",
+                                "most-movies",
+                                "least-movies"
+                            ]
                         }
                     }
                 ],
@@ -1412,6 +1526,25 @@
                             "format": "int64",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "sort by",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "newest",
+                                "oldest",
+                                "most-likes",
+                                "least-likes",
+                                "most-dislikes",
+                                "least-dislikes",
+                                "most-replies",
+                                "least-replies"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -1459,6 +1592,25 @@
                         "schema": {
                             "format": "int64",
                             "default": 10
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "sort by",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "newest",
+                                "oldest",
+                                "most-likes",
+                                "least-likes",
+                                "most-dislikes",
+                                "least-dislikes",
+                                "most-replies",
+                                "least-replies"
+                            ]
                         }
                     }
                 ],
@@ -1811,6 +1963,27 @@
                             "format": "int64",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "sort by",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "newest",
+                                "oldest",
+                                "highest-score",
+                                "lowest-score",
+                                "most-likes",
+                                "least-likes",
+                                "most-dislikes",
+                                "least-dislikes",
+                                "most-replies",
+                                "least-replies"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -1936,6 +2109,27 @@
                         "schema": {
                             "format": "int64",
                             "default": 10
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "sort by",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "newest",
+                                "oldest",
+                                "highest-score",
+                                "lowest-score",
+                                "most-likes",
+                                "least-likes",
+                                "most-dislikes",
+                                "least-dislikes",
+                                "most-replies",
+                                "least-replies"
+                            ]
                         }
                     }
                 ],

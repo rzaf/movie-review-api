@@ -37,6 +37,16 @@ class CategoryController extends Controller
      *              default=10
      *          )
      *      ),
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="sort by",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"newest","oldest","most-movies","least-movies"},
+     *              default=""
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="ok",
@@ -49,7 +59,8 @@ class CategoryController extends Controller
         $perpage = intval($req->query('perpage', 10));
         return CategoryResource::collection(Category
             ::withCount('movies')
-            ->paginate($perpage));
+            ->sortBy($req->query('sort'))
+            ->paginate($perpage));;
     }
 
     /**
@@ -85,6 +96,16 @@ class CategoryController extends Controller
      *              default=10
      *          )
      *      ),
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="sort by",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"newest","oldest","most-movies","least-movies"},
+     *              default=""
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="ok",
@@ -98,6 +119,7 @@ class CategoryController extends Controller
         return CategoryResource::collection(Category
             ::withCount('movies')
             ->whereLike('name', "%$term%")
+            ->sortBy($req->query('sort'))
             ->paginate($perpage));
     }
 
