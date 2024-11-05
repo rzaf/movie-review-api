@@ -46,6 +46,60 @@ class MovieController extends Controller
      *          )
      *      ),
      *      @OA\Parameter(
+     *          name="score",
+     *          in="query",
+     *          description="filter score",
+     *          @OA\Schema(
+     *              format="float",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="likes_count",
+     *          in="query",
+     *          description="filter likes_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="dislikes_count",
+     *          in="query",
+     *          description="filter dislikes_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="reviews_count",
+     *          in="query",
+     *          description="filter reviews_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="release_year",
+     *          in="query",
+     *          description="filter release_year",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="category",
+     *          in="query",
+     *          description="filter category name",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
      *          name="sort",
      *          in="query",
      *          description="sort by",
@@ -66,10 +120,12 @@ class MovieController extends Controller
     {
         $perpage = intval($req->query('perpage', 10));
         return MovieResource::collection(Movie
-            ::withAvg('reviews', 'score')
+            ::filter($req->all())
+            ->withAvg('reviews', 'score')
             ->withCount('likes')
             ->withCount('dislikes')
             ->withCount('reviews')
+            ->with('category:id,name')
             ->sortBy($req->query('sort'))
             ->paginate($perpage));
     }
@@ -108,6 +164,60 @@ class MovieController extends Controller
      *          )
      *      ),
      *      @OA\Parameter(
+     *          name="score",
+     *          in="query",
+     *          description="filter score",
+     *          @OA\Schema(
+     *              format="float",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="likes_count",
+     *          in="query",
+     *          description="filter likes_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="dislikes_count",
+     *          in="query",
+     *          description="filter dislikes_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="reviews_count",
+     *          in="query",
+     *          description="filter reviews_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="release_year",
+     *          in="query",
+     *          description="filter release_year",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="category",
+     *          in="query",
+     *          description="filter category name",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
      *          name="sort",
      *          in="query",
      *          description="sort by",
@@ -128,13 +238,16 @@ class MovieController extends Controller
     {
         $perpage = intval($req->query('perpage', 10));
         return MovieResource::collection(Movie
-            ::withAvg('reviews', 'score')
+            ::filter($req->all())
+            ->withAvg('reviews', 'score')
             ->withCount('likes')
             ->withCount('dislikes')
             ->withCount('reviews')
+            ->with('category:id,name')
             ->whereLike('name', "%$term%")
             ->sortBy($req->query('sort'))
-            ->paginate($perpage));;
+            ->paginate($perpage));
+        ;
     }
 
     /**

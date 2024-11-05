@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,8 @@ class Person extends Model
 {
     /** @use HasFactory<\Database\Factories\PersonFactory> */
     use HasFactory;
-
+    use Filterable;
+    
     protected $table = 'people';
     protected $fillable = ['name', 'is_male', 'birth_date'];
     // protected $hidden = ['pivot'];

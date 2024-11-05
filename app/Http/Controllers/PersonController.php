@@ -40,6 +40,34 @@ class PersonController extends Controller
      *          )
      *      ),
      *      @OA\Parameter(
+     *          name="followers_count",
+     *          in="query",
+     *          description="filter followers_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="movies_count",
+     *          in="query",
+     *          description="filter movies_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="gender",
+     *          in="query",
+     *          description="filter gender",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"male","female",""},
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
      *          name="sort",
      *          in="query",
      *          description="sort by",
@@ -60,7 +88,8 @@ class PersonController extends Controller
     {
         $perpage = intval($req->query('perpage', 10));
         return PersonResource::collection(Person
-            ::withCount('followers')
+            ::filter($req->all())
+            ->withCount('followers')
             ->withCount('movies')
             ->sortBy($req->query('sort'))
             ->paginate($perpage));
@@ -100,6 +129,34 @@ class PersonController extends Controller
      *          )
      *      ),
      *      @OA\Parameter(
+     *          name="followers_count",
+     *          in="query",
+     *          description="filter followers_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="movies_count",
+     *          in="query",
+     *          description="filter movies_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="gender",
+     *          in="query",
+     *          description="filter gender",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"male","female",""},
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
      *          name="sort",
      *          in="query",
      *          description="sort by",
@@ -120,7 +177,8 @@ class PersonController extends Controller
     {
         $perpage = intval($req->query('perpage', 10));
         return PersonResource::collection(Person
-            ::withCount('followers')
+            ::filter($req->all())
+            ->withCount('followers')
             ->withCount('movies')
             ->whereLike('name', "%$term%")
             ->sortBy($req->query('sort'))

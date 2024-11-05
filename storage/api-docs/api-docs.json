@@ -352,6 +352,60 @@
                         }
                     },
                     {
+                        "name": "score",
+                        "in": "query",
+                        "description": "filter score",
+                        "schema": {
+                            "format": "float",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "likes_count",
+                        "in": "query",
+                        "description": "filter likes_count",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "dislikes_count",
+                        "in": "query",
+                        "description": "filter dislikes_count",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "reviews_count",
+                        "in": "query",
+                        "description": "filter reviews_count",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "release_year",
+                        "in": "query",
+                        "description": "filter release_year",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "description": "filter category name",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
                         "name": "sort",
                         "in": "query",
                         "description": "sort by",
@@ -478,6 +532,60 @@
                         "schema": {
                             "format": "int64",
                             "default": 10
+                        }
+                    },
+                    {
+                        "name": "score",
+                        "in": "query",
+                        "description": "filter score",
+                        "schema": {
+                            "format": "float",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "likes_count",
+                        "in": "query",
+                        "description": "filter likes_count",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "dislikes_count",
+                        "in": "query",
+                        "description": "filter dislikes_count",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "reviews_count",
+                        "in": "query",
+                        "description": "filter reviews_count",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "release_year",
+                        "in": "query",
+                        "description": "filter release_year",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "description": "filter category name",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
                         }
                     },
                     {
@@ -1064,6 +1172,38 @@
                         }
                     },
                     {
+                        "name": "followers_count",
+                        "in": "query",
+                        "description": "filter followers_count",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "movies_count",
+                        "in": "query",
+                        "description": "filter movies_count",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "description": "filter gender",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "male",
+                                "female",
+                                ""
+                            ]
+                        }
+                    },
+                    {
                         "name": "sort",
                         "in": "query",
                         "description": "sort by",
@@ -1182,6 +1322,38 @@
                         "schema": {
                             "format": "int64",
                             "default": 10
+                        }
+                    },
+                    {
+                        "name": "followers_count",
+                        "in": "query",
+                        "description": "filter followers_count",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "movies_count",
+                        "in": "query",
+                        "description": "filter movies_count",
+                        "schema": {
+                            "format": "int64",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "description": "filter gender",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "male",
+                                "female",
+                                ""
+                            ]
                         }
                     },
                     {

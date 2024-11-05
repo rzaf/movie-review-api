@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,7 @@ class Movie extends Model
 {
     /** @use HasFactory<\Database\Factories\MovieFactory> */
     use HasFactory;
+    use Filterable;
 
     protected $fillable = ['name', 'url', 'category_id', 'release_year'];
 
