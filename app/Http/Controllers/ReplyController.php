@@ -10,7 +10,6 @@ use App\Http\Requests\replies\UpdateReply;
 use App\Http\Resources\ReplyResource;
 use App\Models\Like;
 use App\Models\Reply;
-use Illuminate\Database\QueryException;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 
@@ -30,6 +29,51 @@ class ReplyController extends Controller
      *          @OA\Schema(
      *              format="int64",
      *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="search_term",
+     *          in="query",
+     *          description="search_term",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="username",
+     *          in="query",
+     *          description="username",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="likes_count",
+     *          in="query",
+     *          description="filter likes_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="dislikes_count",
+     *          in="query",
+     *          description="filter dislikes_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="replies_count",
+     *          in="query",
+     *          description="filter replies_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
      *          )
      *      ),
      *      @OA\Parameter(
@@ -71,7 +115,8 @@ class ReplyController extends Controller
     {
         $perpage = intval($req->query('perpage', 10));
         $replies = Reply
-            ::where(['review_id' => $reviewId])
+            ::filter($req->all())
+            ->where(['review_id' => $reviewId])
             ->with(['user'])
             ->withCount('replies')
             ->withCount('likes')
@@ -95,6 +140,51 @@ class ReplyController extends Controller
      *          @OA\Schema(
      *              format="int64",
      *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="search_term",
+     *          in="query",
+     *          description="search_term",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="username",
+     *          in="query",
+     *          description="username",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="likes_count",
+     *          in="query",
+     *          description="filter likes_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="dislikes_count",
+     *          in="query",
+     *          description="filter dislikes_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="replies_count",
+     *          in="query",
+     *          description="filter replies_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
      *          )
      *      ),
      *      @OA\Parameter(
@@ -136,7 +226,8 @@ class ReplyController extends Controller
     {
         $perpage = intval($req->query('perpage', 10));
         $replies = Reply
-            ::where(['reply_id' => $replyId])
+            ::filter($req->all())
+            ->where(['reply_id' => $replyId])
             ->with(['user'])
             ->withCount('replies')
             ->withCount('likes')

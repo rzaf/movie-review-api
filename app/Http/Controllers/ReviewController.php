@@ -11,7 +11,6 @@ use App\Http\Resources\ReviewResource;
 use App\Models\Like;
 use App\Models\Movie;
 use App\Models\Review;
-use Illuminate\Database\QueryException;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 
@@ -29,6 +28,60 @@ class ReviewController extends Controller
      *          description="url of movie",
      *          @OA\Schema(
      *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="search_term",
+     *          in="query",
+     *          description="search_term",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="username",
+     *          in="query",
+     *          description="username",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="score",
+     *          in="query",
+     *          description="filter score",
+     *          @OA\Schema(
+     *              format="float",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="likes_count",
+     *          in="query",
+     *          description="filter likes_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="dislikes_count",
+     *          in="query",
+     *          description="filter dislikes_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="replies_count",
+     *          in="query",
+     *          description="filter replies_count",
+     *          @OA\Schema(
+     *              format="int64",
      *              default=""
      *          )
      *      ),
@@ -73,87 +126,12 @@ class ReviewController extends Controller
         abort_if($movie == null, 404, 'movie not found');
         $perpage = intval($req->query('perpage', 10));
         return ReviewResource::collection(Review
-            ::where(['movie_id' => $movie->id])
+            ::filter($req->all())
+            ->where(['movie_id' => $movie->id])
             ->with(['user'])
             ->withCount('replies')
             ->withCount('likes')
             ->withCount('dislikes')
-            ->sortBy($req->query('sort'))
-            ->paginate($perpage));
-    }
-
-
-    /**
-     * search reviews of specefied movie.
-     *
-     * @OA\Get(
-     *      path="/api/movies/{movie_url}/reviews/search/{search_term}",
-     *      tags={"review"},
-     *      @OA\Parameter(
-     *          name="movie_url",
-     *          in="path",
-     *          description="url of movie",
-     *          @OA\Schema(
-     *              format="string",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="search_term",
-     *          in="path",
-     *          description="search_term",
-     *          @OA\Schema(
-     *              format="string",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="page",
-     *          in="query",
-     *          description="number of page",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=1
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="perpage",
-     *          in="query",
-     *          description="number of items in a page",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=10
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="sort",
-     *          in="query",
-     *          description="sort by",
-     *          @OA\Schema(
-     *              format="string",
-     *              enum={"newest","oldest","highest-score","lowest-score","most-likes","least-likes","most-dislikes","least-dislikes","most-replies","least-replies"},
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="ok",
-     *          @OA\JsonContent()
-     *      )
-     * )
-     */
-    public function search(Request $req, string $url, string $term)
-    {
-        $movie = Movie::where(['url' => $url])->first('id');
-        abort_if($movie == null, 404, 'movie not found');
-        $perpage = intval($req->query('perpage', 10));
-        return ReviewResource::collection(Review
-            ::where(['movie_id' => $movie->id])
-            ->with(['user'])
-            ->withCount('replies')
-            ->withCount('likes')
-            ->withCount('dislikes')
-            ->whereLike('review', "%$term%")
             ->sortBy($req->query('sort'))
             ->paginate($perpage));
     }
