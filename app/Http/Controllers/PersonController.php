@@ -22,88 +22,8 @@ class PersonController extends Controller
      *      path="/api/people",
      *      tags={"person"},
      *      @OA\Parameter(
-     *          name="page",
-     *          in="query",
-     *          description="number of page",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=1
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="perpage",
-     *          in="query",
-     *          description="number of items in a page",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=10
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="followers_count",
-     *          in="query",
-     *          description="filter followers_count",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="movies_count",
-     *          in="query",
-     *          description="filter movies_count",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="gender",
-     *          in="query",
-     *          description="filter gender",
-     *          @OA\Schema(
-     *              format="string",
-     *              enum={"male","female",""},
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="sort",
-     *          in="query",
-     *          description="sort by",
-     *          @OA\Schema(
-     *              format="string",
-     *              enum={"newest-created","oldest-created","youngest","oldest","most-followers","least-followers","most-movies","least-movies"},
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="ok",
-     *          @OA\JsonContent()
-     *      )
-     * )
-     */
-    public function index(Request $req)
-    {
-        $perpage = intval($req->query('perpage', 10));
-        return PersonResource::collection(Person
-            ::filter($req->all())
-            ->withCount('followers')
-            ->withCount('movies')
-            ->sortBy($req->query('sort'))
-            ->paginate($perpage));
-    }
-
-    /**
-     * search people.
-     *
-     * @OA\Get(
-     *      path="/api/people/search/{search_term}",
-     *      tags={"person"},
-     *      @OA\Parameter(
      *          name="search_term",
-     *          in="path",
+     *          in="query",
      *          description="search_term",
      *          @OA\Schema(
      *              format="string",
@@ -173,14 +93,13 @@ class PersonController extends Controller
      *      )
      * )
      */
-    public function search(Request $req, string $term)
+    public function index(Request $req)
     {
         $perpage = intval($req->query('perpage', 10));
         return PersonResource::collection(Person
             ::filter($req->all())
             ->withCount('followers')
             ->withCount('movies')
-            ->whereLike('name', "%$term%")
             ->sortBy($req->query('sort'))
             ->paginate($perpage));
     }

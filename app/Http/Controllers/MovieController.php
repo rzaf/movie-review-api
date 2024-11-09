@@ -28,6 +28,15 @@ class MovieController extends Controller
      *      path="/api/movies",
      *      tags={"movie"},
      *      @OA\Parameter(
+     *          name="search_term",
+     *          in="query",
+     *          description="search_term",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
      *          name="page",
      *          in="query",
      *          description="number of page",
@@ -128,126 +137,6 @@ class MovieController extends Controller
             ->with('category:id,name')
             ->sortBy($req->query('sort'))
             ->paginate($perpage));
-    }
-
-    /**
-     * search movies.
-     *
-     * @OA\Get(
-     *      path="/api/movies/search/{search_term}",
-     *      tags={"movie"},
-     *      @OA\Parameter(
-     *          name="search_term",
-     *          in="path",
-     *          description="search_term",
-     *          @OA\Schema(
-     *              format="string",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="page",
-     *          in="query",
-     *          description="number of page",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=1
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="perpage",
-     *          in="query",
-     *          description="number of items in a page",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=10
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="score",
-     *          in="query",
-     *          description="filter score",
-     *          @OA\Schema(
-     *              format="float",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="likes_count",
-     *          in="query",
-     *          description="filter likes_count",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="dislikes_count",
-     *          in="query",
-     *          description="filter dislikes_count",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="reviews_count",
-     *          in="query",
-     *          description="filter reviews_count",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="release_year",
-     *          in="query",
-     *          description="filter release_year",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="category",
-     *          in="query",
-     *          description="filter category name",
-     *          @OA\Schema(
-     *              format="string",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="sort",
-     *          in="query",
-     *          description="sort by",
-     *          @OA\Schema(
-     *              format="string",
-     *              enum={"newest","oldest","newest-release","oldest-release","most-likes","least-likes","most-dislikes","least-dislikes","most-reviews","least-reviews","best-reviewed","worst-reviewed"},
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="ok",
-     *          @OA\JsonContent()
-     *      )
-     * )
-     */
-    public function search(Request $req, string $term)
-    {
-        $perpage = intval($req->query('perpage', 10));
-        return MovieResource::collection(Movie
-            ::filter($req->all())
-            ->withAvg('reviews', 'score')
-            ->withCount('likes')
-            ->withCount('dislikes')
-            ->withCount('reviews')
-            ->with('category:id,name')
-            ->whereLike('name', "%$term%")
-            ->sortBy($req->query('sort'))
-            ->paginate($perpage));
-        ;
     }
 
     /**

@@ -4,26 +4,24 @@ namespace App\ModelFilters;
 
 use EloquentFilter\ModelFilter;
 
-class PersonFilter extends ModelFilter
+class CategoryFilter extends ModelFilter
 {
-
-    public function gender($str)
-    {
-        return $this->where('is_male', '=', $str==='male');
-    }
-
+    /**
+     * Related Models that have ModelFilters as well as the method on the ModelFilter
+     * As [relationMethod => [input_key1, input_key2]].
+     *
+     * @var array
+     */
+    public $relations = [];
+    
     public function searchTerm($term)
     {
         return $this->whereLike('name', "%$term%");
-    }
-
-    public function followersCount($cnt)
-    {
-        return $this->has('followers', '=', $cnt);   
     }
 
     public function moviesCount($cnt)
     {
         return $this->has('movies', '=', $cnt);   
     }
+
 }

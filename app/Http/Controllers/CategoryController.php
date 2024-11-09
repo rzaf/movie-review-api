@@ -20,6 +20,24 @@ class CategoryController extends Controller
      *      path="/api/categories",
      *      tags={"category"},
      *      @OA\Parameter(
+     *          name="search_term",
+     *          in="query",
+     *          description="search_term",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="movies_count",
+     *          in="query",
+     *          description="filter movies_count",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
      *          name="page",
      *          in="query",
      *          description="number of page",
@@ -58,69 +76,10 @@ class CategoryController extends Controller
     {
         $perpage = intval($req->query('perpage', 10));
         return CategoryResource::collection(Category
-            ::withCount('movies')
+            ::filter($req->all())
+            ->withCount('movies')
             ->sortBy($req->query('sort'))
             ->paginate($perpage));;
-    }
-
-    /**
-     * search categories.
-     *
-     * @OA\Get(
-     *      path="/api/categories/search/{search_term}",
-     *      tags={"category"},
-     *      @OA\Parameter(
-     *          name="search_term",
-     *          in="path",
-     *          description="search_term",
-     *          @OA\Schema(
-     *              format="string",
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="page",
-     *          in="query",
-     *          description="number of page",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=1
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="perpage",
-     *          in="query",
-     *          description="number of items in a page",
-     *          @OA\Schema(
-     *              format="int64",
-     *              default=10
-     *          )
-     *      ),
-     *      @OA\Parameter(
-     *          name="sort",
-     *          in="query",
-     *          description="sort by",
-     *          @OA\Schema(
-     *              format="string",
-     *              enum={"newest","oldest","most-movies","least-movies"},
-     *              default=""
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="ok",
-     *          @OA\JsonContent()
-     *      )
-     * )
-     */
-    public function search(Request $req, string $term)
-    {
-        $perpage = intval($req->query('perpage', 10));
-        return CategoryResource::collection(Category
-            ::withCount('movies')
-            ->whereLike('name', "%$term%")
-            ->sortBy($req->query('sort'))
-            ->paginate($perpage));
     }
 
     /**

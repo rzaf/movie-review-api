@@ -27,6 +27,11 @@ class MovieFilter extends ModelFilter
         return $this->related('category', 'name','=', $name);   
     }
 
+    public function searchTerm($term)
+    {
+        return $this->whereLike('name', "%$term%");
+    }
+
     public function score($score)
     {
         return $this->whereHas('reviews', function (Builder $query) {
