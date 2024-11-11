@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\people\DestroyPerson;
 use App\Http\Requests\people\StorePerson;
 use App\Http\Requests\people\UpdatePerson;
+use App\Http\Resources\MovieStaffResource;
 use App\Http\Resources\PersonResource;
 use App\Models\Following;
+use App\Models\MovieStaff;
 use App\Models\Person;
-// use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
@@ -214,6 +215,71 @@ class PersonController extends Controller
      *              default=1
      *          )
      *      ),
+     *      @OA\Parameter(
+     *          name="release_year",
+     *          in="query",
+     *          description="filter release_year of movies that person worked in",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="work",
+     *          in="query",
+     *          description="filter job of person in movies",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"actor","producer","director","music","writer"},
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="search",
+     *          in="query",
+     *          description="search in movies that person worked",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="category",
+     *          in="query",
+     *          description="filter category name of movies that person worked",
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="number of page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="perpage",
+     *          in="query",
+     *          description="number of items in a page",
+     *          @OA\Schema(
+     *              format="int64",
+     *              default=10
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="sort by",
+     *          @OA\Schema(
+     *              format="string",
+     *              enum={"newest","oldest","newest-release","oldest-release"},
+     *              default=""
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=404,
      *          description="person not found",
@@ -226,16 +292,33 @@ class PersonController extends Controller
      *      )
      * )
      */
-    public function personMovies(string $id)
+    public function personMovies(Request $req, string $id)
     {
+        $perpage = intval($req->query('perpage', 10));
         $person = Person
-            ::with(['moviesWorkedIn'])
+            ::withCount('movies')
             ->withCount('followers')
-            // ->withCount('movies')
             ->find($id);
         abort_if($person == null, 404, 'preson not found');
-        // return $person;
-        return new PersonResource($person);
+        $movies = MovieStaff
+            ::select([
+                'movies.name',
+                'movies.url',
+                'movies.release_year',
+                'movies.created_at',
+                'categories.name as category_name',
+                'movie_actors.job',
+            ])
+            ->join('movies', 'movie_id', '=', 'movies.id')
+            ->join('categories', 'categories.id', '=', 'movies.category_id')
+            ->whereRaw('person_id=?', $id)
+            ->filter($req->all())
+            ->sortBy($req->query('sort'))
+            ->simplePaginate($perpage);
+        return MovieStaffResource::collection($movies)->additional([
+            'person' => new PersonResource($person),
+        ]);
+        // return ['person' => $personArray, 'movies' => MovieStaffResource::collection($movies)];
     }
 
 

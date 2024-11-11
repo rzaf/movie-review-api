@@ -1297,6 +1297,82 @@
                             "format": "int64",
                             "default": 1
                         }
+                    },
+                    {
+                        "name": "release_year",
+                        "in": "query",
+                        "description": "filter release_year of movies that person worked in",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "work",
+                        "in": "query",
+                        "description": "filter job of person in movies",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "actor",
+                                "producer",
+                                "director",
+                                "music",
+                                "writer"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "search in movies that person worked",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "description": "filter category name of movies that person worked",
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "number of page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "perpage",
+                        "in": "query",
+                        "description": "number of items in a page",
+                        "schema": {
+                            "format": "int64",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "sort by",
+                        "schema": {
+                            "format": "string",
+                            "default": "",
+                            "enum": [
+                                "newest",
+                                "oldest",
+                                "newest-release",
+                                "oldest-release"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
