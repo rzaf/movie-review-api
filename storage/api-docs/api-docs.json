@@ -870,13 +870,13 @@
                 ]
             }
         },
-        "/api/movies/{url}/tags/{name}": {
+        "/api/movies/{url}/genres/{name}": {
             "post": {
                 "tags": [
                     "movie"
                 ],
-                "summary": "add a tag to specified movie.",
-                "operationId": "ddc84874d898267d4699fa36f49109d0",
+                "summary": "add a genre to specified movie.",
+                "operationId": "f4075cb3640144a1a896138d7d218657",
                 "parameters": [
                     {
                         "name": "url",
@@ -891,7 +891,7 @@
                     {
                         "name": "name",
                         "in": "path",
-                        "description": "name of tag",
+                        "description": "name of genre",
                         "required": true,
                         "schema": {
                             "format": "string",
@@ -901,7 +901,7 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "tag added to movie",
+                        "description": "genre added to movie",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -909,7 +909,7 @@
                         }
                     },
                     "400": {
-                        "description": "tag already added to movie",
+                        "description": "genre already added to movie",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -935,8 +935,8 @@
                 "tags": [
                     "movie"
                 ],
-                "summary": "remove tag from specified movie.",
-                "operationId": "f66fe95e34095bbd94dd636668aafab1",
+                "summary": "remove genre from specified movie.",
+                "operationId": "25b67be056c658ccc68658b822ce338e",
                 "parameters": [
                     {
                         "name": "url",
@@ -951,7 +951,7 @@
                     {
                         "name": "name",
                         "in": "path",
-                        "description": "name of tag",
+                        "description": "name of genre",
                         "required": true,
                         "schema": {
                             "format": "string",
@@ -961,7 +961,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "tag removed from movie",
+                        "description": "genre removed from movie",
                         "content": {
                             "application/json": {
                                 "schema": {}

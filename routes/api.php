@@ -49,8 +49,8 @@ Route::delete('/movies/{url}', [MovieController::class, 'destroy'])->middleware(
 Route::post('/movies/{movie_url}/people/{person_id}', [MovieController::class, 'addPerson'])->middleware('auth:sanctum');
 Route::delete('/movies/{movie_url}/people/{person_id}', [MovieController::class, 'removePerson'])->middleware('auth:sanctum');
 
-Route::post('/movies/{movie_url}/tags/{name}', [MovieController::class, 'addTag'])->middleware('auth:sanctum');
-Route::delete('/movies/{movie_url}/tags/{name}', [MovieController::class, 'removeTag'])->middleware('auth:sanctum');
+Route::post('/movies/{movie_url}/genres/{name}', [MovieController::class, 'addGenre'])->middleware('auth:sanctum');
+Route::delete('/movies/{movie_url}/genres/{name}', [MovieController::class, 'removeGenre'])->middleware('auth:sanctum');
 
 Route::post('/movies/{movie_url}/like', [MovieController::class, 'storeLike'])->middleware('auth:sanctum');
 Route::delete('/movies/{movie_url}/like', [MovieController::class, 'destroyLike'])->middleware('auth:sanctum');

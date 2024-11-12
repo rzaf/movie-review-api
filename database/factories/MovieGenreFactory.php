@@ -2,15 +2,17 @@
 
 namespace Database\Factories;
 
+use App\Models\Genre;
 use App\Models\Movie;
+use App\Models\MovieGenre;
 use App\Models\MovieTag;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MovieTag>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MovieGenre>
  */
-class MovieTagFactory extends Factory
+class MovieGenreFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -24,15 +26,15 @@ class MovieTagFactory extends Factory
         $movieId = 1;
 
         while ($resets < 10) {
-            $tagId = $this->faker->numberBetween(1, Tag::count());
+            $tagId = $this->faker->numberBetween(1, Genre::count());
             $movieId = $this->faker->numberBetween(1, Movie::count());
-            if (!MovieTag::where(['tag_id' => $tagId, 'movie_id' => $movieId])->exists()) {
+            if (!MovieGenre::where(['genre_id' => $tagId, 'movie_id' => $movieId])->exists()) {
                 break;
             }
             $resets++;
         }
         return [
-            'tag_id' => $tagId,
+            'genre_id' => $tagId,
             'movie_id' => $movieId,
         ];
     }

@@ -5,19 +5,14 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Following;
 use App\Models\Like;
-use App\Models\Movie;
 use App\Models\Person;
 use App\Models\Reply;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Database\Factories\CategoryFactory;
 use Database\Factories\MovieFactory;
 use Database\Factories\MovieStaffFactory;
-use Database\Factories\MovieTagFactory;
-use Database\Factories\PersonFactory;
-use Database\Factories\ReplyFactory;
 use Database\Factories\ReviewFactory;
-use Database\Factories\TagFactory;
+use Database\Factories\GenreFactory;
+use Database\Factories\MovieGenreFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
 
@@ -30,12 +25,12 @@ class DatabaseSeeder extends Seeder
     {
         UserFactory::times(100)->create();
         Category::factory()->createMany(25);
-        PersonFactory::times(100)->create();
+        Person::factory()->createMany(100);
         Following::factory()->createMany(20);
-        MovieFactory::times(50)->create();
+        MovieFactory::times(100)->create();
         MovieStaffFactory::times(20)->create();
-        TagFactory::times(40)->create();
-        MovieTagFactory::times(10)->create();
+        GenreFactory::times(40)->create();
+        MovieGenreFactory::times(10)->create();
         ReviewFactory::times(40)->create();
         Reply::factory()->createMany(20);
         Like::factory()->createMany(20);

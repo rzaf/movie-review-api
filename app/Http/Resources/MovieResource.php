@@ -24,9 +24,9 @@ class MovieResource extends JsonResource
             'staff' => PersonResource::collection($this->whenLoaded('staff')),
             'likes_count' => $this->whenCounted('likes'),
             'dislikes_count' => $this->whenCounted('dislikes'),
-            // 'tags' => $this->whenAggregated('tags', 'name', 'group_concat'),
-            'tags' => $this->whenHas('tags_group_concat_name', function () {
-                return $this->tags_group_concat_name ?? '';
+            // 'genres' => $this->whenAggregated('genres', 'name', 'group_concat'),
+            'genres' => $this->whenHas('genres_group_concat_name', function () {
+                return $this->genres_group_concat_name ?? '';
             }),
             'worked_as' => $this->whenPivotLoaded('movie_actors', function () {
                 return $this->pivot->job;

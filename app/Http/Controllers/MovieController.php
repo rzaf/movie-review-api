@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\movies\AddPerson;
-use App\Http\Requests\movies\AddTag;
+use App\Http\Requests\movies\AddGenre;
 use App\Http\Requests\movies\DestroyMovie;
 use App\Http\Requests\movies\DestroyMovieLike;
-use App\Http\Requests\movies\RemoveTag;
+use App\Http\Requests\movies\RemoveGenre;
 use App\Http\Requests\movies\StoreMovie;
 use App\Http\Requests\movies\StoreMovieLike;
 use App\Http\Requests\movies\UpdateMovie;
@@ -14,7 +14,7 @@ use App\Http\Resources\MovieResource;
 use App\Models\Like;
 use App\Models\Movie;
 use App\Models\MovieStaff;
-use App\Models\MovieTag;
+use App\Models\MovieGenre;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
@@ -130,6 +130,7 @@ class MovieController extends Controller
         $perpage = intval($req->query('perpage', 10));
         return MovieResource::collection(Movie
             ::filter($req->all())
+            ->withAggregate('genres', 'name', 'group_concat')
             ->withAvg('reviews', 'score')
             ->withCount('likes')
             ->withCount('dislikes')
@@ -236,8 +237,8 @@ class MovieController extends Controller
     public function show(string $url)
     {
         $movie = Movie::where(['url' => $url])
-            ->with(['category:id,name', 'staff:id,name'])
-            ->withAggregate('tags', 'name', 'group_concat')
+            ->with(['category:id,name'])
+            ->withAggregate('genres', 'name', 'group_concat')
             ->withAvg('reviews', 'score')
             ->withCount('reviews')
             ->withCount('likes')
@@ -623,10 +624,10 @@ class MovieController extends Controller
 
 
     /**
-     * add a tag to specified movie.
+     * add a genre to specified movie.
      *
      * @OA\Post(
-     *      path="/api/movies/{url}/tags/{name}",
+     *      path="/api/movies/{url}/genres/{name}",
      *      tags={"movie"},
      *      @OA\Parameter(
      *          name="url",
@@ -641,7 +642,7 @@ class MovieController extends Controller
      *      @OA\Parameter(
      *          name="name",
      *          in="path",
-     *          description="name of tag",
+     *          description="name of genre",
      *          required=true,
      *          @OA\Schema(
      *              format="string",
@@ -653,12 +654,12 @@ class MovieController extends Controller
      *      },
      *      @OA\Response(
      *          response=201,
-     *          description="tag added to movie",
+     *          description="genre added to movie",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
      *          response=400,
-     *          description="tag already added to movie",
+     *          description="genre already added to movie",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
@@ -668,25 +669,25 @@ class MovieController extends Controller
      *      )
      * )
      */
-    public function addTag(AddTag $req)
+    public function addGenre(AddGenre $req)
     {
         $validated = $req->validated();
         try {
-            MovieTag::create($validated);
+            MovieGenre::create($validated);
         } catch (UniqueConstraintViolationException $e) {
-            abort(400, "tag already added to movie");
+            abort(400, "genre already added to movie");
         }
         return response([
-            'message' => 'tag added to movie',
+            'message' => 'genre added to movie',
         ], 201);
     }
 
 
     /**
-     * remove tag from specified movie.
+     * remove genre from specified movie.
      *
      * @OA\Delete(
-     *      path="/api/movies/{url}/tags/{name}",
+     *      path="/api/movies/{url}/genres/{name}",
      *      tags={"movie"},
      *      @OA\Parameter(
      *          name="url",
@@ -701,7 +702,7 @@ class MovieController extends Controller
      *      @OA\Parameter(
      *          name="name",
      *          in="path",
-     *          description="name of tag",
+     *          description="name of genre",
      *          required=true,
      *          @OA\Schema(
      *              format="string",
@@ -713,7 +714,7 @@ class MovieController extends Controller
      *      },
      *      @OA\Response(
      *          response=200,
-     *          description="tag removed from movie",
+     *          description="genre removed from movie",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
@@ -723,14 +724,14 @@ class MovieController extends Controller
      *      )
      * )
      */
-    public function removeTag(RemoveTag $req)
+    public function removeGenre(RemoveGenre $req)
     {
         $validated = $req->validated();
-        $ok = MovieTag::where($validated)->delete();
-        abort_if(!$ok, 404, 'tag not in movie');
+        $ok = MovieGenre::where($validated)->delete();
+        abort_if(!$ok, 404, 'genre not in movie');
 
         return response([
-            'message' => 'tag removed from movie',
+            'message' => 'genre removed from movie',
         ], 200);
     }
 

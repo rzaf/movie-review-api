@@ -36,9 +36,9 @@ class Movie extends Model
         return $this->hasMany(Review::class);
     }
 
-    public function tags(): BelongsToMany
+    public function genres(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'movie_tags');
+        return $this->belongsToMany(Genre::class, 'movie_genres');
     }
 
     public function likes(): MorphMany
