@@ -17,14 +17,8 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $parentId = null;
-        if ($this->faker->boolean(30)){
-            $parentId = $this->faker->numberBetween(1,Category::count()+1);
-        }
         return [
             'name' => $this->faker->unique()->word(),
-            'has_items' => 1,
-            'parent_id' => $parentId,
         ];
     }
 }

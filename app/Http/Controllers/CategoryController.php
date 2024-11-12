@@ -193,9 +193,9 @@ class CategoryController extends Controller
      *              @OA\Schema(
      *                  type="object",
      *                  @OA\Property(
-     *                      property="new_name",
+     *                      property="name",
      *                      description="new name of the category",
-     *                      type="",
+     *                      default="",
      *                  )
      *              )
      *          )

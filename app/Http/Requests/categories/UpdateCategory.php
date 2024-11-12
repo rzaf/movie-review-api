@@ -31,17 +31,4 @@ class UpdateCategory extends FormRequest
             'has_items' => 'sometimes|bool',
         ];
     }
-
-    public function validated($key = null, $default = null): array
-    {
-        $validated = parent::validated();
-        if (isset($validated['parent_name'])) {
-            $parent = Category::where(['name' => $validated['parent_name']])->first('id');
-            abort_if($parent == null, 404, 'parent_name not found');
-            $validated['parent_id'] = $parent->id;
-            unset($validated['parent_name']);
-        }
-        return $validated;
-    }
-
 }

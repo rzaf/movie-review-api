@@ -16,9 +16,7 @@ class CategoryResource extends JsonResource
     {
         $arr = [
             'name' => $this->name,
-            'parent_name' => $this->parentCategory?->name,
             'movies_count' => $this->whenCounted('movies'),
-            'has_items' => $this->has_items,
         ];
         return $arr;
     }
