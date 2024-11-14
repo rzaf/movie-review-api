@@ -18,9 +18,9 @@ class Category extends Model
     public $fillable = ['name'];
     // public $hidden = ['id'];
 
-    public function movies(): HasMany
+    public function medias(): HasMany
     {
-        return $this->hasMany(Movie::class);
+        return $this->hasMany(Media::class);
     }
 
     public function scopeSortBy(Builder $query, ?string $sortType): void
@@ -34,16 +34,16 @@ class Category extends Model
             case 'oldest':
                 $query->orderBy('created_at', 'asc')->orderBy('id', 'asc');
                 return;
-            case 'most-movies':
-                $order = 'movies_count';
+            case 'most-medias':
+                $order = 'medias_count';
                 $dir = 'desc';
                 break;
-            case 'least-movies':
-                $order = 'movies_count';
+            case 'least-medias':
+                $order = 'medias_count';
                 $dir = 'asc';
                 break;
             default:
-                abort(400, 'invalid sort type:' . $sortType . '. valid sort types are:newest,oldest,most-movies,least-movies');
+                abort(400, 'invalid sort type:' . $sortType . '. valid sort types are:newest,oldest,most-medias,least-medias');
         }
         $query->orderBy($order, $dir);
     }

@@ -272,7 +272,7 @@ class ReplyController extends Controller
             ::where(['id' => $id])
             ->with([
                 'user',
-                'review' => ['user', 'movie'],
+                'review' => ['user', 'media'],
                 'reply' => ['user'],
             ])
             ->withCount('replies')
@@ -330,7 +330,7 @@ class ReplyController extends Controller
      *      ),
      *      @OA\Response(
      *          response=400,
-     *          description="movie is already reviewd ",
+     *          description="media is already reviewd ",
      *          @OA\JsonContent()
      *      )
      * )

@@ -21,7 +21,7 @@ class ReviewResource extends JsonResource
             'reviewer_username' => $this->whenLoaded('user', function () {
                 return $this->user->name;
             }),
-            'movie' => new MovieResource($this->whenLoaded('movie')),
+            'media' => new MediaResource($this->whenLoaded('media')),
             'replies_count' => $this->whenCounted('replies'),
             'likes_count' => $this->whenCounted('likes'),
             'dislikes_count' => $this->whenCounted('dislikes'),

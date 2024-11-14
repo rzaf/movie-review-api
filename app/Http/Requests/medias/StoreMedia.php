@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\movies;
+namespace App\Http\Requests\medias;
 
 use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateMovie extends FormRequest
+class StoreMedia extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +27,9 @@ class UpdateMovie extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'url' => 'sometimes|string',
-            'release_date' => 'sometimes|date|max:2020',
-            'category_name' => 'sometimes|string',
+            'url' => 'required|string',
+            'release_date' => 'required|date|max:2020',
+            'category_name' => 'required|string',
             'summary' => 'sometimes|string|max:256',
             'storyline' => 'sometimes|string|max:2048',
         ];
@@ -38,12 +38,10 @@ class UpdateMovie extends FormRequest
     public function validated($key = null, $default = null): array
     {
         $validated = parent::validated();
-        if (isset($validated['category_name'])){
-            $cat = Category::where(['name' => $validated['category_name']])->first(['id']);
-            abort_if($cat == null, 404, 'category not found');
-            $validated['category_id'] = $cat->id;
-            unset($validated['category_name']);
-        }
+        $cat = Category::where(['name' => $validated['category_name']])->first(['id']);
+        abort_if($cat == null, 404, 'category not found');
+        $validated['category_id'] = $cat->id;
+        unset($validated['category_name']);
         return $validated;
     }
 }

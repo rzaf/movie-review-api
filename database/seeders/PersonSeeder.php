@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Following;
 use App\Models\Person;
 use App\Models\User;
-use Database\Factories\MovieStaffFactory;
+use Database\Factories\MediaStaffFactory;
 use Faker\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

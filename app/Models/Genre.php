@@ -13,8 +13,8 @@ class Genre extends Model
 
     protected $fillable = ['name'];
 
-    public function movies(): BelongsToMany
+    public function medias(): BelongsToMany
     {
-        return $this->belongsToMany(Movie::class,'movie_genres');
+        return $this->belongsToMany(Media::class,'media_genres');
     }
 }

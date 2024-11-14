@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MovieResource extends JsonResource
+class MediaResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -48,7 +48,7 @@ class MovieResource extends JsonResource
             'likes_count' => $this->whenCounted('likes'),
             'dislikes_count' => $this->whenCounted('dislikes'),
             'staff' => PersonResource::collection($this->whenLoaded('staff')),
-            'worked_as' => $this->whenPivotLoaded('movie_actors', function () {
+            'worked_as' => $this->whenPivotLoaded('media_actors', function () {
                 return $this->pivot->job;
             }),
 

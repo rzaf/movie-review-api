@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public static $keywordsCnt = 25;
     public static $companiesCnt = 25;
 
-    public static $moviesCnt = 50;
+    public static $mediasCnt = 50;
     // public static $reviewsCnt = 30;
 
     public static $peopleCnt = 100;
@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             CompanySeeder::class,
             GenreSeeder::class,
             PersonSeeder::class,
-            MovieSeeder::class,
+            MediaSeeder::class,
             ReviewSeeder::class,
             ReplySeeder::class,
         ]);

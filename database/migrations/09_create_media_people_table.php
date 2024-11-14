@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('movie_actors', function (Blueprint $table) {
+        Schema::create('media_actors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('movie_id')->constrained('movies');
+            $table->foreignId('media_id')->constrained('medias');
             $table->foreignId('person_id')->constrained('people');
             $table->enum('job',[
                 'director',
@@ -22,7 +22,7 @@ return new class extends Migration
                 'actor',
                 'music',
             ]);
-            $table->unique(['movie_id', 'person_id','job']);
+            $table->unique(['media_id', 'person_id','job']);
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('movie_actors');
+        Schema::dropIfExists('media_actors');
     }
 };

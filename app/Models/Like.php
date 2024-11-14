@@ -14,7 +14,7 @@ class Like extends Model
     protected $fillable = ['is_liked','user_id','likeable_type','likeable_id'];
     protected $table = 'likes';
 
-    // movie,review,reply
+    // media,review,reply
     public function likeable(): MorphTo
     {
         return $this->morphTo();

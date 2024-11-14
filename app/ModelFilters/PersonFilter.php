@@ -22,8 +22,8 @@ class PersonFilter extends ModelFilter
         return $this->has('followers', '=', $cnt);   
     }
 
-    public function moviesCount($cnt)
+    public function mediasCount($cnt)
     {
-        return $this->has('movies', '=', $cnt);   
+        return $this->has('medias', '=', $cnt);   
     }
 }

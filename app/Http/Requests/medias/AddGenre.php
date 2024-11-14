@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Requests\movies;
+namespace App\Http\Requests\medias;
 
 use App\Models\Genre;
-use App\Models\Movie;
+use App\Models\Media;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AddGenre extends FormRequest
@@ -24,9 +24,9 @@ class AddGenre extends FormRequest
     {
         $validated = parent::validated();
         $validated['name'] = $this->route('name');
-        $movie = Movie::where(['url' => $this->route('movie_url')])->first('id');
-        abort_if($movie == null, 404, 'movie not found');
-        $validated['movie_id'] = $movie->id;
+        $media = Media::where(['url' => $this->route('media_url')])->first('id');
+        abort_if($media == null, 404, 'media not found');
+        $validated['media_id'] = $media->id;
         $genre = Genre::createOrFirst(['name' => $this->route('name')]);
         $validated['genre_id'] = $genre->id;
         return $validated;

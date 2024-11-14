@@ -4,7 +4,7 @@ namespace App\ModelFilters;
 
 use EloquentFilter\ModelFilter;
 
-class MovieStaffFilter extends ModelFilter
+class MediaStaffFilter extends ModelFilter
 {
     /**
      * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -31,7 +31,7 @@ class MovieStaffFilter extends ModelFilter
 
     public function search($term)
     {
-        return $this->whereLike('movies.name', $term);
+        return $this->whereLike('medias.name', $term);
     }
 
 }

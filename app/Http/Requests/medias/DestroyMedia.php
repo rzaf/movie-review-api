@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\movies;
+namespace App\Http\Requests\medias;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroyMovie extends FormRequest
+class DestroyMedia extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->boolean('is_liked');
             $table->foreignId('user_id')->constrained('users');
             $table->morphs('likeable');
-            // $table->foreignId('likeable_id')->constrained('movies');
-            // $table->enum('likeable_type',['movies','review','review_replies']);
+            // $table->foreignId('likeable_id')->constrained('medias');
+            // $table->enum('likeable_type',['medias','review','review_replies']);
             $table->unique(['user_id', 'likeable_type','likeable_id']);
             $table->timestamps();
         });

@@ -11,13 +11,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Movie extends Model
+class Media extends Model
 {
-    /** @use HasFactory<\Database\Factories\MovieFactory> */
+    /** @use HasFactory<\Database\Factories\MediaFactory> */
     use HasFactory;
     use Filterable;
 
     protected $fillable = ['name', 'url', 'category_id', 'release_date', 'summary', 'storyline'];
+    protected $table = 'medias';
 
     public function category(): BelongsTo
     {
@@ -26,27 +27,27 @@ class Movie extends Model
 
     public function languages(): BelongsToMany
     {
-        return $this->belongsToMany(Language::class, 'movie_languages');
+        return $this->belongsToMany(Language::class, 'media_languages');
     }
 
     public function countries(): BelongsToMany
     {
-        return $this->belongsToMany(Country::class, 'movie_countries');
+        return $this->belongsToMany(Country::class, 'media_countries');
     }
     
     public function keywords(): BelongsToMany
     {
-        return $this->belongsToMany(Keyword::class, 'movie_keywords');
+        return $this->belongsToMany(Keyword::class, 'media_keywords');
     }
 
     public function companies(): BelongsToMany
     {
-        return $this->belongsToMany(Company::class, 'movie_companies');
+        return $this->belongsToMany(Company::class, 'media_companies');
     }
 
     public function staff(): BelongsToMany
     {
-        return $this->belongsToMany(Person::class, 'movie_actors')
+        return $this->belongsToMany(Person::class, 'media_actors')
             ->withPivot('job');
     }
 
@@ -57,7 +58,7 @@ class Movie extends Model
 
     public function genres(): BelongsToMany
     {
-        return $this->belongsToMany(Genre::class, 'movie_genres');
+        return $this->belongsToMany(Genre::class, 'media_genres');
     }
 
     public function likes(): MorphMany

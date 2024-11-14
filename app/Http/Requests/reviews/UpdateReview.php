@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\reviews;
 
-use App\Models\Movie;
+use App\Models\Media;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateReview extends FormRequest

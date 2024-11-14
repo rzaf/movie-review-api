@@ -6,7 +6,7 @@ use DB;
 use EloquentFilter\ModelFilter;
 use Illuminate\Database\Eloquent\Builder;
 
-class MovieFilter extends ModelFilter
+class MediaFilter extends ModelFilter
 {
     /**
      * Related Models that have ModelFilters as well as the method on the ModelFilter

@@ -29,10 +29,10 @@ class PersonResource extends JsonResource
                 return $this->is_male ? 'male' : 'female';
             }),
             'about' => $this->whenHas('about'),
-            'movies' => MovieResource::collection($this->whenLoaded('moviesWorkedIn')),
+            'medias' => MediaResource::collection($this->whenLoaded('mediasWorkedIn')),
             'followers_count' => $this->whenCounted('followers'),
-            'movies_count' => $this->whenCounted('movies'),
-            'worked_as' => $this->whenPivotLoaded('movie_actors', function () {
+            'medias_count' => $this->whenCounted('medias'),
+            'worked_as' => $this->whenPivotLoaded('media_actors', function () {
                 return $this->pivot->job;
             }),
         ];

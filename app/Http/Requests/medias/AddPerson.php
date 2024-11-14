@@ -1,18 +1,22 @@
 <?php
 
-namespace App\Http\Requests\movies;
+namespace App\Http\Requests\medias;
 
-use App\Models\Movie;
+use App\Models\Media;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreMovieLike extends FormRequest
+class AddPerson extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        if (auth()->user()->isAdmin()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -23,18 +27,17 @@ class StoreMovieLike extends FormRequest
     public function rules(): array
     {
         return [
-            'is_liked' => 'required|bool'
+            'job' => ['required', 'string', Rule::in(['director', 'producer', 'writer', 'actor', 'music'])],
         ];
     }
 
     public function validated($key = null, $default = null): array
     {
         $validated = parent::validated();
-        $movie = Movie::where(['url' => $this->route('movie_url')])->first(['id']);
-        abort_if($movie == null, 404, 'movie not found');
-        $validated['likeable_id'] = $movie->id;
-        $validated['likeable_type'] = Movie::class;
-        $validated['user_id'] = auth()->user()->id;
+        $media = Media::where(['url' => $this->route('media_url')])->first('id');
+        abort_if($media == null, 404, 'media not found');
+        $validated['media_id'] = $media->id;
+        $validated['person_id'] = $this->route('person_id');
         return $validated;
     }
 

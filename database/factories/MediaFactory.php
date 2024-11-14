@@ -2,16 +2,16 @@
 
 namespace Database\Factories;
 
-use App\Models\Movie;
+use App\Models\Media;
 use Carbon\Carbon;
 use Database\Seeders\DatabaseSeeder;
 use Date;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Movie>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Media>
  */
-class MovieFactory extends Factory
+class MediaFactory extends Factory
 {
     /**
      * Define the model's default state.

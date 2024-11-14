@@ -19,9 +19,9 @@ class CategoryFilter extends ModelFilter
         return $this->whereLike('name', "%$term%");
     }
 
-    public function moviesCount($cnt)
+    public function mediasCount($cnt)
     {
-        return $this->has('movies', '=', $cnt);   
+        return $this->has('medias', '=', $cnt);   
     }
 
 }

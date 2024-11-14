@@ -2,31 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\movies\AddPerson;
-use App\Http\Requests\movies\AddGenre;
-use App\Http\Requests\movies\DestroyMovie;
-use App\Http\Requests\movies\DestroyMovieLike;
-use App\Http\Requests\movies\RemoveGenre;
-use App\Http\Requests\movies\StoreMovie;
-use App\Http\Requests\movies\StoreMovieLike;
-use App\Http\Requests\movies\UpdateMovie;
-use App\Http\Resources\MovieResource;
+use App\Http\Requests\medias\AddPerson;
+use App\Http\Requests\medias\AddGenre;
+use App\Http\Requests\medias\DestroyMedia;
+use App\Http\Requests\medias\DestroyMediaLike;
+use App\Http\Requests\medias\RemoveGenre;
+use App\Http\Requests\medias\StoreMedia;
+use App\Http\Requests\medias\StoreMediaLike;
+use App\Http\Requests\medias\UpdateMedia;
+use App\Http\Resources\MediaResource;
 use App\Models\Like;
-use App\Models\Movie;
-use App\Models\MovieStaff;
-use App\Models\MovieGenre;
+use App\Models\Media;
+use App\Models\MediaStaff;
+use App\Models\MediaGenre;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 
-class MovieController extends Controller
+class MediaController extends Controller
 {
     /**
-     * get movies.
+     * get medias.
      *
      * @OA\Get(
-     *      path="/api/movies",
-     *      tags={"movie"},
+     *      path="/api/medias",
+     *      tags={"media"},
      *      @OA\Parameter(
      *          name="search_term",
      *          in="query",
@@ -128,7 +128,7 @@ class MovieController extends Controller
     public function index(Request $req)
     {
         $perpage = intval($req->query('perpage', 10));
-        return MovieResource::collection(Movie
+        return MediaResource::collection(Media
             ::select([
                 'name',
                 'url',
@@ -152,11 +152,11 @@ class MovieController extends Controller
     }
 
     /**
-     * create new movie.
+     * create new media.
      *
      * @OA\Post(
-     *      path="/api/movies",
-     *      tags={"movie"},
+     *      path="/api/medias",
+     *      tags={"media"},
      *      @OA\RequestBody(
      *          description="request body",
      *          @OA\MediaType(
@@ -165,32 +165,32 @@ class MovieController extends Controller
      *                  type="object",
      *                  @OA\Property(
      *                      property="name",
-     *                      description="name of movie",
+     *                      description="name of media",
      *                      default=""
      *                  ),
      *                  @OA\Property(
      *                      property="url",
-     *                      description="url of movie",
+     *                      description="url of media",
      *                      default=""
      *                  ),
      *                  @OA\Property(
      *                      property="release_date",
-     *                      description="release_date of movie",
+     *                      description="release_date of media",
      *                      default=""
      *                  ),
      *                  @OA\Property(
      *                      property="category_name",
-     *                      description="category_name of movie",
+     *                      description="category_name of media",
      *                      default=""
      *                  ),
      *                  @OA\Property(
      *                      property="summary",
-     *                      description="summary of movie",
+     *                      description="summary of media",
      *                      default=""
      *                  ),
      *                  @OA\Property(
      *                      property="storyline",
-     *                      description="storyline of movie",
+     *                      description="storyline of media",
      *                      default=""
      *                  )
      *              )
@@ -201,7 +201,7 @@ class MovieController extends Controller
      *      },
      *      @OA\Response(
      *          response=201,
-     *          description="movie created",
+     *          description="media created",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
@@ -211,32 +211,32 @@ class MovieController extends Controller
      *      )
      * )
      */
-    public function store(StoreMovie $req)
+    public function store(StoreMedia $req)
     {
         $validated = $req->validated();
         try {
-            $movie = Movie::create($validated);
+            $media = Media::create($validated);
         } catch (UniqueConstraintViolationException $e) {
             abort(400, 'duplicate url');
         }
 
         return response([
-            'message' => 'movie created',
-            'data' => new MovieResource($movie),
+            'message' => 'media created',
+            'data' => new MediaResource($media),
         ], 201);
     }
 
 
     /**
-     * get specified movie.
+     * get specified media.
      *
      * @OA\Get(
-     *      path="/api/movies/{url}",
-     *      tags={"movie"},
+     *      path="/api/medias/{url}",
+     *      tags={"media"},
      *      @OA\Parameter(
      *          name="url",
      *          in="path",
-     *          description="url of movie",
+     *          description="url of media",
      *          required=true,
      *          @OA\Schema(
      *              format="string",
@@ -245,19 +245,19 @@ class MovieController extends Controller
      *      ),
      *      @OA\Response(
      *          response=404,
-     *          description="movie not found",
+     *          description="media not found",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="movie found",
+     *          description="media found",
      *          @OA\JsonContent()
      *      )
      * )
      */
     public function show(string $url)
     {
-        $movie = Movie::where(['url' => $url])
+        $media = Media::where(['url' => $url])
             ->with(['category:id,name','staff:name,url'])
             ->withAggregate('genres', 'name', 'group_concat')
             ->withAggregate('languages', 'name', 'group_concat')
@@ -269,21 +269,21 @@ class MovieController extends Controller
             ->withCount('likes')
             ->withCount('dislikes')
             ->first();
-        abort_if($movie == null, 404, 'movie not found');
-        return new MovieResource($movie);
-        // return $movie;
+        abort_if($media == null, 404, 'media not found');
+        return new MediaResource($media);
+        // return $media;
     }
 
     /**
      * update specified category.
      *
      * @OA\Put(
-     *      path="/api/movies/{url}",
-     *      tags={"movie"},
+     *      path="/api/medias/{url}",
+     *      tags={"media"},
      *      @OA\Parameter(
      *          name="url",
      *          in="path",
-     *          description="url of movie",
+     *          description="url of media",
      *          required=true,
      *          @OA\Schema(
      *              format="string",
@@ -299,37 +299,37 @@ class MovieController extends Controller
      *                  required={"name"},
      *                  @OA\Property(
      *                      property="name",
-     *                      description="new name of movie",
+     *                      description="new name of media",
      *                      type="string",
      *                      default="",
      *                  ),
      *                  @OA\Property(
      *                      property="url",
-     *                      description="new url of movie",
+     *                      description="new url of media",
      *                      type="string",
      *                      default="",
      *                  ),
      *                  @OA\Property(
      *                      property="release_date",
-     *                      description="new release_date of movie",
+     *                      description="new release_date of media",
      *                      type="string",
      *                      default="",
      *                  ),
      *                  @OA\Property(
      *                      property="category_name",
-     *                      description="new category_name of movie",
+     *                      description="new category_name of media",
      *                      type="string",
      *                      default="",
      *                  ),
      *                  @OA\Property(
      *                      property="summary",
-     *                      description="summary of movie",
+     *                      description="summary of media",
      *                      type="string",
      *                      default="",
      *                  ),
      *                  @OA\Property(
      *                      property="storyline",
-     *                      description="storyline of movie",
+     *                      description="storyline of media",
      *                      type="string",
      *                      default="",
      *                  )
@@ -341,12 +341,12 @@ class MovieController extends Controller
      *      },
      *      @OA\Response(
      *          response=200,
-     *          description="movie updated",
+     *          description="media updated",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
      *          response=404,
-     *          description="movie not found",
+     *          description="media not found",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
@@ -356,17 +356,17 @@ class MovieController extends Controller
      *      )
      * )
      */
-    public function update(UpdateMovie $req)
+    public function update(UpdateMedia $req)
     {
         $validated = $req->validated();
         try {
-            $ok = Movie::where(['url' => $req->route('url')])->update($validated);
+            $ok = Media::where(['url' => $req->route('url')])->update($validated);
         } catch (UniqueConstraintViolationException $e) {
             abort(400, 'duplicate url');
         }
-        abort_if(!$ok, 404, sprintf("movie with url:`%s` not found", $req->route('url')));
+        abort_if(!$ok, 404, sprintf("media with url:`%s` not found", $req->route('url')));
         return response([
-            'message' => 'movie edited',
+            'message' => 'media edited',
         ], 200);
     }
 
@@ -374,12 +374,12 @@ class MovieController extends Controller
      * delete specified category.
      *
      * @OA\Delete(
-     *      path="/api/movies/{url}",
-     *      tags={"movie"},
+     *      path="/api/medias/{url}",
+     *      tags={"media"},
      *      @OA\Parameter(
      *          name="url",
      *          in="path",
-     *          description="url of movie",
+     *          description="url of media",
      *          required=true,
      *          @OA\Schema(
      *              format="string",
@@ -391,36 +391,36 @@ class MovieController extends Controller
      *      },
      *      @OA\Response(
      *          response=200,
-     *          description="movie deleted",
+     *          description="media deleted",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
      *          response=404,
-     *          description="movie not found",
+     *          description="media not found",
      *          @OA\JsonContent()
      *      )
      * )
      */
-    public function destroy(DestroyMovie $req, string $url)
+    public function destroy(DestroyMedia $req, string $url)
     {
-        $ok = Movie::where(['url' => $url])->delete();
-        abort_if($ok == null, 404, 'movie not found');
+        $ok = Media::where(['url' => $url])->delete();
+        abort_if($ok == null, 404, 'media not found');
         return response([
-            'message' => 'movie deleted'
+            'message' => 'media deleted'
         ], 200);
     }
 
 
     /**
-     * like/dislike specified movie.
+     * like/dislike specified media.
      *
      * @OA\Post(
-     *      path="/api/movies/{url}/like",
-     *      tags={"movie"},
+     *      path="/api/medias/{url}/like",
+     *      tags={"media"},
      *      @OA\Parameter(
      *          name="url",
      *          in="path",
-     *          description="url of movie",
+     *          description="url of media",
      *          required=true,
      *          @OA\Schema(
      *              format="string",
@@ -435,7 +435,7 @@ class MovieController extends Controller
      *                  type="object",
      *                  @OA\Property(
      *                      property="is_liked",
-     *                      description="liking or disliking movie",
+     *                      description="liking or disliking media",
      *                      default=""
      *                  )
      *              )
@@ -456,13 +456,13 @@ class MovieController extends Controller
      *      )
      * )
      */
-    public function storeLike(StoreMovieLike $req)
+    public function storeLike(StoreMediaLike $req)
     {
         $validated = $req->validated();
         try {
             Like::create($validated);
         } catch (UniqueConstraintViolationException $e) {
-            abort(400, 'movie already liked/disliked');
+            abort(400, 'media already liked/disliked');
         }
         return response([
             'message' => 'like/dislike created',
@@ -471,15 +471,15 @@ class MovieController extends Controller
 
 
     /**
-     * remove like/dislike of specified movie.
+     * remove like/dislike of specified media.
      *
      * @OA\Delete(
-     *      path="/api/movies/{url}/like",
-     *      tags={"movie"},
+     *      path="/api/medias/{url}/like",
+     *      tags={"media"},
      *      @OA\Parameter(
      *          name="url",
      *          in="path",
-     *          description="url of movie",
+     *          description="url of media",
      *          required=true,
      *          @OA\Schema(
      *              format="string",
@@ -501,11 +501,11 @@ class MovieController extends Controller
      *      )
      * )
      */
-    public function destroyLike(DestroyMovieLike $req)
+    public function destroyLike(DestroyMediaLike $req)
     {
         $validated = $req->validated();
         $ok = Like::where($validated)->delete();
-        abort_if(!$ok, 400, 'movie is not liked/disliked');
+        abort_if(!$ok, 400, 'media is not liked/disliked');
         return response([
             'message' => 'like/dislike deleted',
         ], 200);
@@ -514,15 +514,15 @@ class MovieController extends Controller
 
 
     /**
-     * add a person to specified movie.
+     * add a person to specified media.
      *
      * @OA\Post(
-     *      path="/api/movies/{url}/people/{person_id}",
-     *      tags={"movie"},
+     *      path="/api/medias/{url}/people/{person_id}",
+     *      tags={"media"},
      *      @OA\Parameter(
      *          name="url",
      *          in="path",
-     *          description="url of movie",
+     *          description="url of media",
      *          required=true,
      *          @OA\Schema(
      *              format="string",
@@ -547,7 +547,7 @@ class MovieController extends Controller
      *                  type="object",
      *                  @OA\Property(
      *                      property="job",
-     *                      description="job of person in movie",
+     *                      description="job of person in media",
      *                      default=""
      *                  )
      *              )
@@ -558,7 +558,7 @@ class MovieController extends Controller
      *      },
      *      @OA\Response(
      *          response=201,
-     *          description="person added to movie",
+     *          description="person added to media",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
@@ -572,31 +572,31 @@ class MovieController extends Controller
     {
         $validated = $req->validated();
         try {
-            MovieStaff::create($validated);
+            MediaStaff::create($validated);
         } catch (UniqueConstraintViolationException $e) {
             $job = $validated['job'];
-            abort(400, "person already added to movie as $job");
+            abort(400, "person already added to media as $job");
         } catch (QueryException $e) {
             if ($e->getCode() == 23000) {
                 abort(404, 'person id not found');
             }
         }
         return response([
-            'message' => 'person added to movie',
+            'message' => 'person added to media',
         ], 201);
     }
 
 
     /**
-     * remove a person to specified movie.
+     * remove a person to specified media.
      *
      * @OA\Delete(
-     *      path="/api/movies/{url}/people/{person_id}",
-     *      tags={"movie"},
+     *      path="/api/medias/{url}/people/{person_id}",
+     *      tags={"media"},
      *      @OA\Parameter(
      *          name="url",
      *          in="path",
-     *          description="url of movie",
+     *          description="url of media",
      *          required=true,
      *          @OA\Schema(
      *              format="string",
@@ -621,7 +621,7 @@ class MovieController extends Controller
      *                  type="object",
      *                  @OA\Property(
      *                      property="job",
-     *                      description="job of person in movie",
+     *                      description="job of person in media",
      *                      default=""
      *                  )
      *              )
@@ -632,7 +632,7 @@ class MovieController extends Controller
      *      },
      *      @OA\Response(
      *          response=200,
-     *          description="person removed from movie",
+     *          description="person removed from media",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
@@ -642,7 +642,7 @@ class MovieController extends Controller
      *      ),
      *      @OA\Response(
      *          response=400,
-     *          description="person was not in movie as spceified job",
+     *          description="person was not in media as spceified job",
      *          @OA\JsonContent()
      *      )
      * )
@@ -651,30 +651,30 @@ class MovieController extends Controller
     {
         $validated = $req->validated();
         try {
-            $ok = MovieStaff::where($validated)->delete();
+            $ok = MediaStaff::where($validated)->delete();
             $job = $validated['job'];
-            abort_if(!$ok, 400, "person was not in movie as $job");
+            abort_if(!$ok, 400, "person was not in media as $job");
         } catch (QueryException $e) {
             if ($e->getCode() == 23000) {
                 abort(404, 'person id not found');
             }
         }
         return response([
-            'message' => "person removed from movie as $job",
+            'message' => "person removed from media as $job",
         ], 200);
     }
 
 
     /**
-     * add a genre to specified movie.
+     * add a genre to specified media.
      *
      * @OA\Post(
-     *      path="/api/movies/{url}/genres/{name}",
-     *      tags={"movie"},
+     *      path="/api/medias/{url}/genres/{name}",
+     *      tags={"media"},
      *      @OA\Parameter(
      *          name="url",
      *          in="path",
-     *          description="url of movie",
+     *          description="url of media",
      *          required=true,
      *          @OA\Schema(
      *              format="string",
@@ -696,12 +696,12 @@ class MovieController extends Controller
      *      },
      *      @OA\Response(
      *          response=201,
-     *          description="genre added to movie",
+     *          description="genre added to media",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
      *          response=400,
-     *          description="genre already added to movie",
+     *          description="genre already added to media",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
@@ -715,26 +715,26 @@ class MovieController extends Controller
     {
         $validated = $req->validated();
         try {
-            MovieGenre::create($validated);
+            MediaGenre::create($validated);
         } catch (UniqueConstraintViolationException $e) {
-            abort(400, "genre already added to movie");
+            abort(400, "genre already added to media");
         }
         return response([
-            'message' => 'genre added to movie',
+            'message' => 'genre added to media',
         ], 201);
     }
 
 
     /**
-     * remove genre from specified movie.
+     * remove genre from specified media.
      *
      * @OA\Delete(
-     *      path="/api/movies/{url}/genres/{name}",
-     *      tags={"movie"},
+     *      path="/api/medias/{url}/genres/{name}",
+     *      tags={"media"},
      *      @OA\Parameter(
      *          name="url",
      *          in="path",
-     *          description="url of movie",
+     *          description="url of media",
      *          required=true,
      *          @OA\Schema(
      *              format="string",
@@ -756,7 +756,7 @@ class MovieController extends Controller
      *      },
      *      @OA\Response(
      *          response=200,
-     *          description="genre removed from movie",
+     *          description="genre removed from media",
      *          @OA\JsonContent()
      *      ),
      *      @OA\Response(
@@ -769,11 +769,11 @@ class MovieController extends Controller
     public function removeGenre(RemoveGenre $req)
     {
         $validated = $req->validated();
-        $ok = MovieGenre::where($validated)->delete();
-        abort_if(!$ok, 404, 'genre not in movie');
+        $ok = MediaGenre::where($validated)->delete();
+        abort_if(!$ok, 404, 'genre not in media');
 
         return response([
-            'message' => 'genre removed from movie',
+            'message' => 'genre removed from media',
         ], 200);
     }
 

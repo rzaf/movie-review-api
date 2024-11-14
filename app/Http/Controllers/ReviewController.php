@@ -9,7 +9,7 @@ use App\Http\Requests\reviews\StoreReviewLike;
 use App\Http\Requests\reviews\UpdateReview;
 use App\Http\Resources\ReviewResource;
 use App\Models\Like;
-use App\Models\Movie;
+use App\Models\Media;
 use App\Models\Review;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
@@ -17,15 +17,15 @@ use Illuminate\Http\Request;
 class ReviewController extends Controller
 {
     /**
-     * get reviews of specefied movie.
+     * get reviews of specefied media.
      *
      * @OA\Get(
-     *      path="/api/movies/{movie_url}/reviews",
+     *      path="/api/medias/{media_url}/reviews",
      *      tags={"review"},
      *      @OA\Parameter(
-     *          name="movie_url",
+     *          name="media_url",
      *          in="path",
-     *          description="url of movie",
+     *          description="url of media",
      *          @OA\Schema(
      *              format="string",
      *              default=""
@@ -122,12 +122,12 @@ class ReviewController extends Controller
      */
     public function index(Request $req, string $url)
     {
-        $movie = Movie::where(['url' => $url])->first('id');
-        abort_if($movie == null, 404, 'movie not found');
+        $media = Media::where(['url' => $url])->first('id');
+        abort_if($media == null, 404, 'media not found');
         $perpage = intval($req->query('perpage', 10));
         return ReviewResource::collection(Review
             ::filter($req->all())
-            ->where(['movie_id' => $movie->id])
+            ->where(['media_id' => $media->id])
             ->with(['user'])
             ->withCount('replies')
             ->withCount('likes')
@@ -141,12 +141,12 @@ class ReviewController extends Controller
      * create a review.
      *
      * @OA\Post(
-     *      path="/api/movies/{movie_url}/reviews",
+     *      path="/api/medias/{media_url}/reviews",
      *      tags={"review"},
      *      @OA\Parameter(
-     *          name="movie_url",
+     *          name="media_url",
      *          in="path",
-     *          description="url of movie",
+     *          description="url of media",
      *          @OA\Schema(
      *              format="string",
      *              default=""
@@ -186,7 +186,7 @@ class ReviewController extends Controller
      *      ),
      *      @OA\Response(
      *          response=400,
-     *          description="movie is already reviewd ",
+     *          description="media is already reviewd ",
      *          @OA\JsonContent()
      *      )
      * )
@@ -197,7 +197,7 @@ class ReviewController extends Controller
         try {
             $review = Review::create($vaildated);
         } catch (UniqueConstraintViolationException $e) {
-            abort(400, 'movie is already reviewd by user');
+            abort(400, 'media is already reviewd by user');
         }
         return response([
             'message' => 'review created',
@@ -237,7 +237,7 @@ class ReviewController extends Controller
     {
         $review = Review
             ::where(['id' => $id])
-            ->with(['user', 'movie.category'])
+            ->with(['user', 'media.category'])
             ->withCount('replies')
             ->withCount('likes')
             ->withCount('dislikes')

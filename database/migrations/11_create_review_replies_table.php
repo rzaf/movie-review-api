@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('text',250);
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('review_id')->nullable()->constrained('movie_reviews');
+            $table->foreignId('review_id')->nullable()->constrained('media_reviews');
             $table->foreignId('reply_id')->nullable()->constrained('review_replies');//if replied to a reply
             // $table->unique(['user_id','review_id']);
             $table->timestamps();

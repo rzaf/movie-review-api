@@ -16,17 +16,17 @@ class Review extends Model
     use HasFactory;
     use Filterable;
 
-    protected $fillable = ['review', 'score', 'user_id', 'movie_id'];
-    protected $table = 'movie_reviews';
+    protected $fillable = ['review', 'score', 'user_id', 'media_id'];
+    protected $table = 'media_reviews';
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function movie(): BelongsTo
+    public function media(): BelongsTo
     {
-        return $this->belongsTo(Movie::class);
+        return $this->belongsTo(Media::class);
     }
 
     public function replies(): HasMany

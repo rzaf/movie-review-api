@@ -25,9 +25,9 @@
                         }
                     },
                     {
-                        "name": "movies_count",
+                        "name": "medias_count",
                         "in": "query",
-                        "description": "filter movies_count",
+                        "description": "filter medias_count",
                         "schema": {
                             "format": "int64",
                             "default": ""
@@ -61,8 +61,8 @@
                             "enum": [
                                 "newest",
                                 "oldest",
-                                "most-movies",
-                                "least-movies"
+                                "most-medias",
+                                "least-medias"
                             ]
                         }
                     }
@@ -280,13 +280,13 @@
                 ]
             }
         },
-        "/api/movies": {
+        "/api/medias": {
             "get": {
                 "tags": [
-                    "movie"
+                    "media"
                 ],
-                "summary": "get movies.",
-                "operationId": "a7859dc5cd106bbeae5492e22df893ec",
+                "summary": "get medias.",
+                "operationId": "85663cb33f26f7c99e5bedf3e9a7595b",
                 "parameters": [
                     {
                         "name": "search_term",
@@ -406,10 +406,10 @@
             },
             "post": {
                 "tags": [
-                    "movie"
+                    "media"
                 ],
-                "summary": "create new movie.",
-                "operationId": "a303e8fe5382b02a193fa994ebef739f",
+                "summary": "create new media.",
+                "operationId": "1b067a94bf495b7adc019bbc63a6a4b8",
                 "requestBody": {
                     "description": "request body",
                     "content": {
@@ -417,27 +417,27 @@
                             "schema": {
                                 "properties": {
                                     "name": {
-                                        "description": "name of movie",
+                                        "description": "name of media",
                                         "default": ""
                                     },
                                     "url": {
-                                        "description": "url of movie",
+                                        "description": "url of media",
                                         "default": ""
                                     },
                                     "release_date": {
-                                        "description": "release_date of movie",
+                                        "description": "release_date of media",
                                         "default": ""
                                     },
                                     "category_name": {
-                                        "description": "category_name of movie",
+                                        "description": "category_name of media",
                                         "default": ""
                                     },
                                     "summary": {
-                                        "description": "summary of movie",
+                                        "description": "summary of media",
                                         "default": ""
                                     },
                                     "storyline": {
-                                        "description": "storyline of movie",
+                                        "description": "storyline of media",
                                         "default": ""
                                     }
                                 },
@@ -448,7 +448,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "movie created",
+                        "description": "media created",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -471,18 +471,18 @@
                 ]
             }
         },
-        "/api/movies/{url}": {
+        "/api/medias/{url}": {
             "get": {
                 "tags": [
-                    "movie"
+                    "media"
                 ],
-                "summary": "get specified movie.",
-                "operationId": "59619eb0ecc1e69b8c3784c805b62e20",
+                "summary": "get specified media.",
+                "operationId": "260f48fee9fff36e0e83c6f33b504f0f",
                 "parameters": [
                     {
                         "name": "url",
                         "in": "path",
-                        "description": "url of movie",
+                        "description": "url of media",
                         "required": true,
                         "schema": {
                             "format": "string",
@@ -492,7 +492,7 @@
                 ],
                 "responses": {
                     "404": {
-                        "description": "movie not found",
+                        "description": "media not found",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -500,7 +500,7 @@
                         }
                     },
                     "200": {
-                        "description": "movie found",
+                        "description": "media found",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -511,15 +511,15 @@
             },
             "put": {
                 "tags": [
-                    "movie"
+                    "media"
                 ],
                 "summary": "update specified category.",
-                "operationId": "9daea65b8365189d94cd402e1f554275",
+                "operationId": "ee589de473f2043a6bdc8c764ade8558",
                 "parameters": [
                     {
                         "name": "url",
                         "in": "path",
-                        "description": "url of movie",
+                        "description": "url of media",
                         "required": true,
                         "schema": {
                             "format": "string",
@@ -537,32 +537,32 @@
                                 ],
                                 "properties": {
                                     "name": {
-                                        "description": "new name of movie",
+                                        "description": "new name of media",
                                         "type": "string",
                                         "default": ""
                                     },
                                     "url": {
-                                        "description": "new url of movie",
+                                        "description": "new url of media",
                                         "type": "string",
                                         "default": ""
                                     },
                                     "release_date": {
-                                        "description": "new release_date of movie",
+                                        "description": "new release_date of media",
                                         "type": "string",
                                         "default": ""
                                     },
                                     "category_name": {
-                                        "description": "new category_name of movie",
+                                        "description": "new category_name of media",
                                         "type": "string",
                                         "default": ""
                                     },
                                     "summary": {
-                                        "description": "summary of movie",
+                                        "description": "summary of media",
                                         "type": "string",
                                         "default": ""
                                     },
                                     "storyline": {
-                                        "description": "storyline of movie",
+                                        "description": "storyline of media",
                                         "type": "string",
                                         "default": ""
                                     }
@@ -574,7 +574,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "movie updated",
+                        "description": "media updated",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -582,7 +582,7 @@
                         }
                     },
                     "404": {
-                        "description": "movie not found",
+                        "description": "media not found",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -606,15 +606,15 @@
             },
             "delete": {
                 "tags": [
-                    "movie"
+                    "media"
                 ],
                 "summary": "delete specified category.",
-                "operationId": "24d3d14745a4fd827313d3e7e20998d9",
+                "operationId": "24a9b1c5e521176bca663601f363d35c",
                 "parameters": [
                     {
                         "name": "url",
                         "in": "path",
-                        "description": "url of movie",
+                        "description": "url of media",
                         "required": true,
                         "schema": {
                             "format": "string",
@@ -624,7 +624,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "movie deleted",
+                        "description": "media deleted",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -632,7 +632,7 @@
                         }
                     },
                     "404": {
-                        "description": "movie not found",
+                        "description": "media not found",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -647,18 +647,18 @@
                 ]
             }
         },
-        "/api/movies/{url}/like": {
+        "/api/medias/{url}/like": {
             "post": {
                 "tags": [
-                    "movie"
+                    "media"
                 ],
-                "summary": "like/dislike specified movie.",
-                "operationId": "246154aa7162b2db9369584a08193410",
+                "summary": "like/dislike specified media.",
+                "operationId": "d915df207017c223f65b7af99c3d792c",
                 "parameters": [
                     {
                         "name": "url",
                         "in": "path",
-                        "description": "url of movie",
+                        "description": "url of media",
                         "required": true,
                         "schema": {
                             "format": "string",
@@ -673,7 +673,7 @@
                             "schema": {
                                 "properties": {
                                     "is_liked": {
-                                        "description": "liking or disliking movie",
+                                        "description": "liking or disliking media",
                                         "default": ""
                                     }
                                 },
@@ -708,15 +708,15 @@
             },
             "delete": {
                 "tags": [
-                    "movie"
+                    "media"
                 ],
-                "summary": "remove like/dislike of specified movie.",
-                "operationId": "1839878444d843d23a1a88a58945272e",
+                "summary": "remove like/dislike of specified media.",
+                "operationId": "a2db8840e5e6b2cb66cdf3c099372131",
                 "parameters": [
                     {
                         "name": "url",
                         "in": "path",
-                        "description": "url of movie",
+                        "description": "url of media",
                         "required": true,
                         "schema": {
                             "format": "string",
@@ -749,18 +749,18 @@
                 ]
             }
         },
-        "/api/movies/{url}/people/{person_id}": {
+        "/api/medias/{url}/people/{person_id}": {
             "post": {
                 "tags": [
-                    "movie"
+                    "media"
                 ],
-                "summary": "add a person to specified movie.",
-                "operationId": "41b9cb686d2efd2ec0386adc5aed031c",
+                "summary": "add a person to specified media.",
+                "operationId": "b64c542fa0b94b99813dd7c4e26c32fd",
                 "parameters": [
                     {
                         "name": "url",
                         "in": "path",
-                        "description": "url of movie",
+                        "description": "url of media",
                         "required": true,
                         "schema": {
                             "format": "string",
@@ -785,7 +785,7 @@
                             "schema": {
                                 "properties": {
                                     "job": {
-                                        "description": "job of person in movie",
+                                        "description": "job of person in media",
                                         "default": ""
                                     }
                                 },
@@ -796,7 +796,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "person added to movie",
+                        "description": "person added to media",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -820,15 +820,15 @@
             },
             "delete": {
                 "tags": [
-                    "movie"
+                    "media"
                 ],
-                "summary": "remove a person to specified movie.",
-                "operationId": "b5b009bce0df1ad462110a6465405e61",
+                "summary": "remove a person to specified media.",
+                "operationId": "23301222aa043517e5dd19f390ba926f",
                 "parameters": [
                     {
                         "name": "url",
                         "in": "path",
-                        "description": "url of movie",
+                        "description": "url of media",
                         "required": true,
                         "schema": {
                             "format": "string",
@@ -853,7 +853,7 @@
                             "schema": {
                                 "properties": {
                                     "job": {
-                                        "description": "job of person in movie",
+                                        "description": "job of person in media",
                                         "default": ""
                                     }
                                 },
@@ -864,7 +864,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "person removed from movie",
+                        "description": "person removed from media",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -880,7 +880,7 @@
                         }
                     },
                     "400": {
-                        "description": "person was not in movie as spceified job",
+                        "description": "person was not in media as spceified job",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -895,18 +895,18 @@
                 ]
             }
         },
-        "/api/movies/{url}/genres/{name}": {
+        "/api/medias/{url}/genres/{name}": {
             "post": {
                 "tags": [
-                    "movie"
+                    "media"
                 ],
-                "summary": "add a genre to specified movie.",
-                "operationId": "f4075cb3640144a1a896138d7d218657",
+                "summary": "add a genre to specified media.",
+                "operationId": "1e2970825e6da6883c2665806e819805",
                 "parameters": [
                     {
                         "name": "url",
                         "in": "path",
-                        "description": "url of movie",
+                        "description": "url of media",
                         "required": true,
                         "schema": {
                             "format": "string",
@@ -926,7 +926,7 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "genre added to movie",
+                        "description": "genre added to media",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -934,7 +934,7 @@
                         }
                     },
                     "400": {
-                        "description": "genre already added to movie",
+                        "description": "genre already added to media",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -958,15 +958,15 @@
             },
             "delete": {
                 "tags": [
-                    "movie"
+                    "media"
                 ],
-                "summary": "remove genre from specified movie.",
-                "operationId": "25b67be056c658ccc68658b822ce338e",
+                "summary": "remove genre from specified media.",
+                "operationId": "22d85ce52e02495b7c0b4135248891df",
                 "parameters": [
                     {
                         "name": "url",
                         "in": "path",
-                        "description": "url of movie",
+                        "description": "url of media",
                         "required": true,
                         "schema": {
                             "format": "string",
@@ -986,7 +986,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "genre removed from movie",
+                        "description": "genre removed from media",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -1054,9 +1054,9 @@
                         }
                     },
                     {
-                        "name": "movies_count",
+                        "name": "medias_count",
                         "in": "query",
-                        "description": "filter movies_count",
+                        "description": "filter medias_count",
                         "schema": {
                             "format": "int64",
                             "default": ""
@@ -1090,8 +1090,8 @@
                                 "oldest",
                                 "most-followers",
                                 "least-followers",
-                                "most-movies",
-                                "least-movies"
+                                "most-medias",
+                                "least-medias"
                             ]
                         }
                     }
@@ -1329,13 +1329,13 @@
                 ]
             }
         },
-        "/api/people/{id}/movies": {
+        "/api/people/{id}/medias": {
             "get": {
                 "tags": [
                     "person"
                 ],
-                "summary": "get movies of specified person.",
-                "operationId": "4ead14e30d8c6bcf49f31bb12a7407c7",
+                "summary": "get medias of specified person.",
+                "operationId": "62568b4f1657efe9e80db4151d03c1cb",
                 "parameters": [
                     {
                         "name": "id",
@@ -1350,7 +1350,7 @@
                     {
                         "name": "release_date",
                         "in": "query",
-                        "description": "filter release_date of movies that person worked in",
+                        "description": "filter release_date of medias that person worked in",
                         "schema": {
                             "format": "string",
                             "default": ""
@@ -1359,7 +1359,7 @@
                     {
                         "name": "work",
                         "in": "query",
-                        "description": "filter job of person in movies",
+                        "description": "filter job of person in medias",
                         "schema": {
                             "format": "string",
                             "default": "",
@@ -1375,7 +1375,7 @@
                     {
                         "name": "search",
                         "in": "query",
-                        "description": "search in movies that person worked",
+                        "description": "search in medias that person worked",
                         "schema": {
                             "format": "string",
                             "default": ""
@@ -1384,7 +1384,7 @@
                     {
                         "name": "category",
                         "in": "query",
-                        "description": "filter category name of movies that person worked",
+                        "description": "filter category name of medias that person worked",
                         "schema": {
                             "format": "string",
                             "default": ""
@@ -1850,7 +1850,7 @@
                         }
                     },
                     "400": {
-                        "description": "movie is already reviewd ",
+                        "description": "media is already reviewd ",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -2065,18 +2065,18 @@
                 ]
             }
         },
-        "/api/movies/{movie_url}/reviews": {
+        "/api/medias/{media_url}/reviews": {
             "get": {
                 "tags": [
                     "review"
                 ],
-                "summary": "get reviews of specefied movie.",
-                "operationId": "8380d50280ddd74477c73e5c3c6056ef",
+                "summary": "get reviews of specefied media.",
+                "operationId": "c1d8245b2e44b34e1fd86821d2800322",
                 "parameters": [
                     {
-                        "name": "movie_url",
+                        "name": "media_url",
                         "in": "path",
-                        "description": "url of movie",
+                        "description": "url of media",
                         "schema": {
                             "format": "string",
                             "default": ""
@@ -2192,12 +2192,12 @@
                     "review"
                 ],
                 "summary": "create a review.",
-                "operationId": "cd94e34491583ace7fc4bbbd2cf28e60",
+                "operationId": "def228f6316270b177058d0eec163a37",
                 "parameters": [
                     {
-                        "name": "movie_url",
+                        "name": "media_url",
                         "in": "path",
-                        "description": "url of movie",
+                        "description": "url of media",
                         "schema": {
                             "format": "string",
                             "default": ""
@@ -2242,7 +2242,7 @@
                         }
                     },
                     "400": {
-                        "description": "movie is already reviewd ",
+                        "description": "media is already reviewd ",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -2796,8 +2796,8 @@
             "description": "categories"
         },
         {
-            "name": "movie",
-            "description": "movie"
+            "name": "media",
+            "description": "media"
         },
         {
             "name": "person",

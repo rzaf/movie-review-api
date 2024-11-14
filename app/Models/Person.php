@@ -24,14 +24,14 @@ class Person extends Model
         return $this->belongsTo(Country::class, 'birth_country');
     }
 
-    public function movies(): BelongsToMany
+    public function medias(): BelongsToMany
     {
-        return $this->belongsToMany(Movie::class, 'movie_actors');
+        return $this->belongsToMany(Media::class, 'media_actors');
     }
 
-    public function moviesWorkedIn(): BelongsToMany
+    public function mediasWorkedIn(): BelongsToMany
     {
-        return $this->belongsToMany(Movie::class, 'movie_actors')->withPivot('job');
+        return $this->belongsToMany(Media::class, 'media_actors')->withPivot('job');
     }
 
     public function followers(): BelongsToMany
@@ -66,16 +66,16 @@ class Person extends Model
                 $order = 'followers_count';
                 $dir = 'asc';
                 break;
-            case 'most-movies':
-                $order = 'movies_count';
+            case 'most-medias':
+                $order = 'medias_count';
                 $dir = 'desc';
                 break;
-            case 'least-movies':
-                $order = 'movies_count';
+            case 'least-medias':
+                $order = 'medias_count';
                 $dir = 'asc';
                 break;
             default:
-                abort(400, 'invalid sort type:' . $sortType . '. valid sort types are:newest-created,oldest-created,youngest,oldest,most-followers,least-followers,most-movies,least-movies');
+                abort(400, 'invalid sort type:' . $sortType . '. valid sort types are:newest-created,oldest-created,youngest,oldest,most-followers,least-followers,most-medias,least-medias');
         }
         $query->orderBy($order, $dir);
     }

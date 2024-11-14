@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\people\DestroyPerson;
 use App\Http\Requests\people\StorePerson;
 use App\Http\Requests\people\UpdatePerson;
-use App\Http\Resources\MovieStaffResource;
+use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\PersonResource;
 use App\Models\Following;
-use App\Models\MovieStaff;
+use App\Models\MediaStaff;
 use App\Models\Person;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -59,9 +59,9 @@ class PersonController extends Controller
      *          )
      *      ),
      *      @OA\Parameter(
-     *          name="movies_count",
+     *          name="medias_count",
      *          in="query",
-     *          description="filter movies_count",
+     *          description="filter medias_count",
      *          @OA\Schema(
      *              format="int64",
      *              default=""
@@ -83,7 +83,7 @@ class PersonController extends Controller
      *          description="sort by",
      *          @OA\Schema(
      *              format="string",
-     *              enum={"newest-created","oldest-created","youngest","oldest","most-followers","least-followers","most-movies","least-movies"},
+     *              enum={"newest-created","oldest-created","youngest","oldest","most-followers","least-followers","most-medias","least-medias"},
      *              default=""
      *          )
      *      ),
@@ -109,7 +109,7 @@ class PersonController extends Controller
             ->filter($req->all())
             ->with('country:id,country_name')
             ->withCount('followers')
-            ->withCount('movies')
+            ->withCount('medias')
             ->sortBy($req->query('sort'))
             ->paginate($perpage));
     }
@@ -222,17 +222,17 @@ class PersonController extends Controller
         $person = Person
             ::withCount('followers')
             ->with('country:id,country_name')
-            ->withCount('movies')
+            ->withCount('medias')
             ->find($id);
         abort_if($person == null, 404, 'preson not found');
         return new PersonResource($person);
     }
 
     /**
-     * get movies of specified person.
+     * get medias of specified person.
      *
      * @OA\Get(
-     *      path="/api/people/{id}/movies",
+     *      path="/api/people/{id}/medias",
      *      tags={"person"},
      *      @OA\Parameter(
      *          name="id",
@@ -247,7 +247,7 @@ class PersonController extends Controller
      *      @OA\Parameter(
      *          name="release_date",
      *          in="query",
-     *          description="filter release_date of movies that person worked in",
+     *          description="filter release_date of medias that person worked in",
      *          @OA\Schema(
      *              format="string",
      *              default=""
@@ -256,7 +256,7 @@ class PersonController extends Controller
      *      @OA\Parameter(
      *          name="work",
      *          in="query",
-     *          description="filter job of person in movies",
+     *          description="filter job of person in medias",
      *          @OA\Schema(
      *              format="string",
      *              enum={"actor","producer","director","music","writer"},
@@ -266,7 +266,7 @@ class PersonController extends Controller
      *      @OA\Parameter(
      *          name="search",
      *          in="query",
-     *          description="search in movies that person worked",
+     *          description="search in medias that person worked",
      *          @OA\Schema(
      *              format="string",
      *              default=""
@@ -275,7 +275,7 @@ class PersonController extends Controller
      *      @OA\Parameter(
      *          name="category",
      *          in="query",
-     *          description="filter category name of movies that person worked",
+     *          description="filter category name of medias that person worked",
      *          @OA\Schema(
      *              format="string",
      *              default=""
@@ -321,33 +321,33 @@ class PersonController extends Controller
      *      )
      * )
      */
-    public function personMovies(Request $req, string $id)
+    public function personMedias(Request $req, string $id)
     {
         $perpage = intval($req->query('perpage', 10));
         $person = Person
-            ::withCount('movies')
+            ::withCount('medias')
             ->withCount('followers')
             ->find($id);
         abort_if($person == null, 404, 'preson not found');
-        $movies = MovieStaff
+        $medias = MediaStaff
             ::select([
-                'movies.name',
-                'movies.url',
-                'movies.release_date',
-                'movies.created_at',
+                'medias.name',
+                'medias.url',
+                'medias.release_date',
+                'medias.created_at',
                 'categories.name as category_name',
-                'movie_actors.job',
+                'media_actors.job',
             ])
-            ->join('movies', 'movie_id', '=', 'movies.id')
-            ->join('categories', 'categories.id', '=', 'movies.category_id')
+            ->join('medias', 'media_id', '=', 'medias.id')
+            ->join('categories', 'categories.id', '=', 'medias.category_id')
             ->whereRaw('person_id=?', $id)
             ->filter($req->all())
             ->sortBy($req->query('sort'))
             ->simplePaginate($perpage);
-        return MovieStaffResource::collection($movies)->additional([
+        return MediaStaffResource::collection($medias)->additional([
             'person' => new PersonResource($person),
         ]);
-        // return ['person' => $personArray, 'movies' => MovieStaffResource::collection($movies)];
+        // return ['person' => $personArray, 'medias' => MediaStaffResource::collection($medias)];
     }
 
 

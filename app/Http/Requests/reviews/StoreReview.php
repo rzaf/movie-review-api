@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\reviews;
 
-use App\Models\Movie;
+use App\Models\Media;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreReview extends FormRequest
@@ -32,9 +32,9 @@ class StoreReview extends FormRequest
     {
         $arr = parent::validated();
         $arr['user_id'] = auth()->user()->id;
-        $movie = Movie::where(['url' => $this->route('movie_url')])->first('id');
-        abort_if($movie == null, 404, 'movie not found');
-        $arr['movie_id'] = $movie->id;
+        $media = Media::where(['url' => $this->route('media_url')])->first('id');
+        abort_if($media == null, 404, 'media not found');
+        $arr['media_id'] = $media->id;
         return $arr;
     }
 

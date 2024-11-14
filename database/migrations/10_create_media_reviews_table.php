@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('movie_reviews', function (Blueprint $table) {
+        Schema::create('media_reviews', function (Blueprint $table) {
             $table->id();
             $table->string('review',500)->nullable();
             $table->tinyInteger('score')->comment('score 0.0 to 10.0 stored 0 to 100');
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('movie_id')->constrained('movies');
-            $table->unique(['user_id','movie_id']);
+            $table->foreignId('media_id')->constrained('medias');
+            $table->unique(['user_id','media_id']);
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('movie_reviews');
+        Schema::dropIfExists('media_reviews');
     }
 };

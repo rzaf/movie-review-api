@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\MovieController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\ReviewController;
@@ -31,7 +31,7 @@ Route::delete('/categories/{name}', [CategoryController::class, 'destroy'])->mid
 // Route::apiResource('/people', PersonController::class);
 Route::post('/people', [PersonController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/people', [PersonController::class, 'index']);
-Route::get('/people/{id}/movies', [PersonController::class, 'personMovies']);
+Route::get('/people/{id}/medias', [PersonController::class, 'personMedias']);
 Route::get('/people/{id}', [PersonController::class, 'show']);
 Route::put('/people/{id}', [PersonController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/people/{id}', [PersonController::class, 'destroy'])->middleware('auth:sanctum');
@@ -39,28 +39,28 @@ Route::delete('/people/{id}', [PersonController::class, 'destroy'])->middleware(
 Route::post('/people/{id}/following', [PersonController::class, 'storeFollowing'])->middleware('auth:sanctum');
 Route::delete('/people/{id}/following', [PersonController::class, 'destroyFollowing'])->middleware('auth:sanctum');
 
-//// movies
-Route::post('/movies', [MovieController::class, 'store'])->middleware('auth:sanctum');
-Route::get('/movies', [MovieController::class, 'index']);
-Route::get('/movies/{url}', [MovieController::class, 'show']);
-Route::put('/movies/{url}', [MovieController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/movies/{url}', [MovieController::class, 'destroy'])->middleware('auth:sanctum');
+//// medias
+Route::post('/medias', [MediaController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/medias', [MediaController::class, 'index']);
+Route::get('/medias/{url}', [MediaController::class, 'show']);
+Route::put('/medias/{url}', [MediaController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/medias/{url}', [MediaController::class, 'destroy'])->middleware('auth:sanctum');
 
-Route::post('/movies/{movie_url}/people/{person_id}', [MovieController::class, 'addPerson'])->middleware('auth:sanctum');
-Route::delete('/movies/{movie_url}/people/{person_id}', [MovieController::class, 'removePerson'])->middleware('auth:sanctum');
+Route::post('/medias/{media_url}/people/{person_id}', [MediaController::class, 'addPerson'])->middleware('auth:sanctum');
+Route::delete('/medias/{media_url}/people/{person_id}', [MediaController::class, 'removePerson'])->middleware('auth:sanctum');
 
-Route::post('/movies/{movie_url}/genres/{name}', [MovieController::class, 'addGenre'])->middleware('auth:sanctum');
-Route::delete('/movies/{movie_url}/genres/{name}', [MovieController::class, 'removeGenre'])->middleware('auth:sanctum');
+Route::post('/medias/{media_url}/genres/{name}', [MediaController::class, 'addGenre'])->middleware('auth:sanctum');
+Route::delete('/medias/{media_url}/genres/{name}', [MediaController::class, 'removeGenre'])->middleware('auth:sanctum');
 
-Route::post('/movies/{movie_url}/like', [MovieController::class, 'storeLike'])->middleware('auth:sanctum');
-Route::delete('/movies/{movie_url}/like', [MovieController::class, 'destroyLike'])->middleware('auth:sanctum');
+Route::post('/medias/{media_url}/like', [MediaController::class, 'storeLike'])->middleware('auth:sanctum');
+Route::delete('/medias/{media_url}/like', [MediaController::class, 'destroyLike'])->middleware('auth:sanctum');
 
 //// reviews
 Route::get('/reviews/{review_id}', [ReviewController::class, 'show']);
 Route::delete('/reviews/{review_id}', [ReviewController::class, 'destroy'])->middleware('auth:sanctum');
 Route::put('/reviews/{review_id}', [ReviewController::class, 'update'])->middleware('auth:sanctum');
-Route::get('/movies/{movie_url}/reviews', [ReviewController::class, 'index']);
-Route::post('/movies/{movie_url}/reviews', [ReviewController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/medias/{media_url}/reviews', [ReviewController::class, 'index']);
+Route::post('/medias/{media_url}/reviews', [ReviewController::class, 'store'])->middleware('auth:sanctum');
 
 Route::post('/reviews/{review_id}/like', [ReviewController::class, 'storeLike'])->middleware('auth:sanctum');
 Route::delete('/reviews/{review_id}/like', [ReviewController::class, 'destroyLike'])->middleware('auth:sanctum');

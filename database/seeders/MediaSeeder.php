@@ -5,13 +5,13 @@ namespace Database\Seeders;
 use App\Models\Company;
 use App\Models\Genre;
 use App\Models\Keyword;
-use App\Models\Movie;
+use App\Models\Media;
 use App\Models\Person;
 use App\Models\User;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 
-class MovieSeeder extends Seeder
+class MediaSeeder extends Seeder
 {
 
     public function run(): void
@@ -23,13 +23,13 @@ class MovieSeeder extends Seeder
         $peopleIds = Person::pluck('id');
         $faker = Factory::create();
 
-        Movie::factory()
-            ->createMany(DatabaseSeeder::$moviesCnt)
-            ->each(function ($movie) use ($userIds, $peopleIds, $genresIds, $keywordsIds, $companiesIds, $faker) {
-                // adding genres to movie
-                $movie->genres()->attach($faker->randomElements($genresIds, rand(1, 5)));
+        Media::factory()
+            ->createMany(DatabaseSeeder::$mediasCnt)
+            ->each(function ($media) use ($userIds, $peopleIds, $genresIds, $keywordsIds, $companiesIds, $faker) {
+                // adding genres to media
+                $media->genres()->attach($faker->randomElements($genresIds, rand(1, 5)));
 
-                // adding likes,dislike to movie
+                // adding likes,dislike to media
                 $randomUsersIds = $faker->randomElements($userIds, rand(1, 10));
                 $likeUsers = [];
                 $dislikeUsers = [];
@@ -40,18 +40,18 @@ class MovieSeeder extends Seeder
                         array_push($dislikeUsers, ['user_id' => $value, 'is_liked' => 0]);
                     }
                 }
-                $movie->likes()->createMany($likeUsers);
-                $movie->dislikes()->createMany($dislikeUsers);
+                $media->likes()->createMany($likeUsers);
+                $media->dislikes()->createMany($dislikeUsers);
 
-                // adding keywords to movies
-                $movie->keywords()->attach($faker->randomElements($keywordsIds, rand(1, 5)));
+                // adding keywords to medias
+                $media->keywords()->attach($faker->randomElements($keywordsIds, rand(1, 5)));
 
-                // adding companies to movie 
+                // adding companies to media 
                 if ($faker->boolean(20)) {
-                    $movie->companies()->attach($faker->randomElements($companiesIds, rand(1, 2)));
+                    $media->companies()->attach($faker->randomElements($companiesIds, rand(1, 2)));
                 }
 
-                // adding reviews to movie  
+                // adding reviews to media  
                 if ($faker->boolean(95)) {
                     $reviewsCnt = rand(3, 10);
                     $randomUsersIds = $faker->randomElements($userIds, $reviewsCnt);
@@ -72,23 +72,23 @@ class MovieSeeder extends Seeder
                         }
                         array_push($reviews, $review);
                     }
-                    $movie->reviews()->createMany($reviews);
+                    $media->reviews()->createMany($reviews);
                 }
 
-                // adding languages to movie
+                // adding languages to media
                 if ($faker->boolean(70)) {
                     $languageIds = LanguagesSeeder::$famousLanguagesIds[0];
                 } else {
                     $languagesCnt = rand(1, 3);
                     $languageIds = $faker->randomElements(LanguagesSeeder::$famousLanguagesIds, $languagesCnt);
                 }
-                $movie->languages()->attach($languageIds);
+                $media->languages()->attach($languageIds);
 
-                // adding countries to movie
+                // adding countries to media
                 $countryCnt = $faker->boolean(80) ? 1 : rand(2, 3);
-                $movie->countries()->attach($faker->randomElements(CountrySeeder::$famousCountriesIds, $countryCnt));
+                $media->countries()->attach($faker->randomElements(CountrySeeder::$famousCountriesIds, $countryCnt));
 
-                // adding staff to movies
+                // adding staff to medias
                 $staffCnt = rand(8, 15);
                 $jobs = [];
                 for ($i = 0; $i < $staffCnt; $i++) {
@@ -116,7 +116,7 @@ class MovieSeeder extends Seeder
                     ];
                     $staffs[] = $staf;
                 }
-                $movie->staff()->attach($staffs);
+                $media->staff()->attach($staffs);
             });
     }
 }

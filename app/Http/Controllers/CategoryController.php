@@ -29,9 +29,9 @@ class CategoryController extends Controller
      *          )
      *      ),
      *      @OA\Parameter(
-     *          name="movies_count",
+     *          name="medias_count",
      *          in="query",
-     *          description="filter movies_count",
+     *          description="filter medias_count",
      *          @OA\Schema(
      *              format="int64",
      *              default=""
@@ -61,7 +61,7 @@ class CategoryController extends Controller
      *          description="sort by",
      *          @OA\Schema(
      *              format="string",
-     *              enum={"newest","oldest","most-movies","least-movies"},
+     *              enum={"newest","oldest","most-medias","least-medias"},
      *              default=""
      *          )
      *      ),
@@ -77,7 +77,7 @@ class CategoryController extends Controller
         $perpage = intval($req->query('perpage', 10));
         return CategoryResource::collection(Category
             ::filter($req->all())
-            ->withCount('movies')
+            ->withCount('medias')
             ->sortBy($req->query('sort'))
             ->paginate($perpage));;
     }
@@ -164,7 +164,7 @@ class CategoryController extends Controller
      */
     public function show(string $name)
     {
-        $cat = Category::where(['name' => $name])->withCount('movies')->first();
+        $cat = Category::where(['name' => $name])->withCount('medias')->first();
         abort_if($cat == null, 404, 'cateogry not found');
         return new CategoryResource($cat);
     }
