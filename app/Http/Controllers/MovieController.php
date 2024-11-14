@@ -91,9 +91,9 @@ class MovieController extends Controller
      *          )
      *      ),
      *      @OA\Parameter(
-     *          name="release_year",
+     *          name="release_date",
      *          in="query",
-     *          description="filter release_year",
+     *          description="filter release_date",
      *          @OA\Schema(
      *              format="int64",
      *              default=""
@@ -129,8 +129,19 @@ class MovieController extends Controller
     {
         $perpage = intval($req->query('perpage', 10));
         return MovieResource::collection(Movie
-            ::filter($req->all())
+            ::select([
+                'name',
+                'url',
+                'category_id',
+                'release_date',
+                'summary',
+            ])
+            ->filter($req->all())
             ->withAggregate('genres', 'name', 'group_concat')
+            ->withAggregate('languages', 'name', 'group_concat')
+            ->withAggregate('countries', 'country_name', 'group_concat')
+            ->withAggregate('keywords', 'name', 'group_concat')
+            ->withAggregate('companies', 'name', 'group_concat')
             ->withAvg('reviews', 'score')
             ->withCount('likes')
             ->withCount('dislikes')
@@ -163,13 +174,23 @@ class MovieController extends Controller
      *                      default=""
      *                  ),
      *                  @OA\Property(
-     *                      property="release_year",
-     *                      description="release_year of movie",
+     *                      property="release_date",
+     *                      description="release_date of movie",
      *                      default=""
      *                  ),
      *                  @OA\Property(
      *                      property="category_name",
      *                      description="category_name of movie",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="summary",
+     *                      description="summary of movie",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="storyline",
+     *                      description="storyline of movie",
      *                      default=""
      *                  )
      *              )
@@ -237,8 +258,12 @@ class MovieController extends Controller
     public function show(string $url)
     {
         $movie = Movie::where(['url' => $url])
-            ->with(['category:id,name'])
+            ->with(['category:id,name','staff:name,url'])
             ->withAggregate('genres', 'name', 'group_concat')
+            ->withAggregate('languages', 'name', 'group_concat')
+            ->withAggregate('countries', 'country_name', 'group_concat')
+            ->withAggregate('keywords', 'name', 'group_concat')
+            ->withAggregate('companies', 'name', 'group_concat')
             ->withAvg('reviews', 'score')
             ->withCount('reviews')
             ->withCount('likes')
@@ -271,25 +296,42 @@ class MovieController extends Controller
      *              mediaType="application/x-www-form-urlencoded",
      *              @OA\Schema(
      *                  type="object",
+     *                  required={"name"},
      *                  @OA\Property(
      *                      property="name",
      *                      description="new name of movie",
-     *                      default=""
+     *                      type="string",
+     *                      default="",
      *                  ),
      *                  @OA\Property(
      *                      property="url",
      *                      description="new url of movie",
-     *                      default=""
+     *                      type="string",
+     *                      default="",
      *                  ),
      *                  @OA\Property(
-     *                      property="release_year",
-     *                      description="new release_year of movie",
-     *                      default=""
+     *                      property="release_date",
+     *                      description="new release_date of movie",
+     *                      type="string",
+     *                      default="",
      *                  ),
      *                  @OA\Property(
      *                      property="category_name",
      *                      description="new category_name of movie",
-     *                      default=""
+     *                      type="string",
+     *                      default="",
+     *                  ),
+     *                  @OA\Property(
+     *                      property="summary",
+     *                      description="summary of movie",
+     *                      type="string",
+     *                      default="",
+     *                  ),
+     *                  @OA\Property(
+     *                      property="storyline",
+     *                      description="storyline of movie",
+     *                      type="string",
+     *                      default="",
      *                  )
      *              )
      *          )

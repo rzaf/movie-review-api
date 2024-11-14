@@ -14,9 +14,9 @@ class MovieStaffFilter extends ModelFilter
      */
     public $relations = [];
     
-    public function releaseYear($year)
+    public function releaseDate($date)
     {
-        return $this->where('release_year', '=', intval($year));
+        return $this->where('release_date', '=', $date);
     }
 
     public function work($job)

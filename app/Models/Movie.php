@@ -17,16 +17,35 @@ class Movie extends Model
     use HasFactory;
     use Filterable;
 
-    protected $fillable = ['name', 'url', 'category_id', 'release_year'];
+    protected $fillable = ['name', 'url', 'category_id', 'release_date', 'summary', 'storyline'];
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
+    public function languages(): BelongsToMany
+    {
+        return $this->belongsToMany(Language::class, 'movie_languages');
+    }
+
+    public function countries(): BelongsToMany
+    {
+        return $this->belongsToMany(Country::class, 'movie_countries');
+    }
+    
+    public function keywords(): BelongsToMany
+    {
+        return $this->belongsToMany(Keyword::class, 'movie_keywords');
+    }
+
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class, 'movie_companies');
+    }
+
     public function staff(): BelongsToMany
     {
-        // return $this->belongsToMany(Person::class)->as('movie_actors');
         return $this->belongsToMany(Person::class, 'movie_actors')
             ->withPivot('job');
     }
@@ -62,19 +81,19 @@ class Movie extends Model
             case 'newest':
                 $order = 'created_at';
                 $dir = 'desc';
-                $query->orderBy($order, $dir)->orderBy('id','asc');
+                $query->orderBy($order, $dir)->orderBy('id', 'asc');
                 return;
             case 'oldest':
                 $order = 'created_at';
                 $dir = 'asc';
-                $query->orderBy($order, $dir)->orderBy('id','desc');
+                $query->orderBy($order, $dir)->orderBy('id', 'desc');
                 return;
             case 'newest-release':
-                $order = 'release_year';
+                $order = 'release_date';
                 $dir = 'desc';
                 break;
             case 'oldest-release':
-                $order = 'release_year';
+                $order = 'release_date';
                 $dir = 'asc';
                 break;
             case 'most-likes':

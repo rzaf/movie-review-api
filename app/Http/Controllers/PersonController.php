@@ -98,7 +98,16 @@ class PersonController extends Controller
     {
         $perpage = intval($req->query('perpage', 10));
         return PersonResource::collection(Person
-            ::filter($req->all())
+            ::select([
+                'name',
+                'url',
+                'age',
+                'is_male',
+                'birth_date',
+                'birth_country',
+            ])
+            ->filter($req->all())
+            ->with('country:id,country_name')
             ->withCount('followers')
             ->withCount('movies')
             ->sortBy($req->query('sort'))
@@ -126,6 +135,11 @@ class PersonController extends Controller
      *                      default=""
      *                  ),
      *                  @OA\Property(
+     *                      property="url",
+     *                      description="url of person",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
      *                      property="is_male",
      *                      description="gender of person",
      *                      default=""
@@ -133,6 +147,16 @@ class PersonController extends Controller
      *                  @OA\Property(
      *                      property="birth_date",
      *                      description="birth_date of person",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="about",
+     *                      description="about person",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="country",
+     *                      description="birth country of person",
      *                      default=""
      *                  )
      *              )
@@ -153,7 +177,11 @@ class PersonController extends Controller
     public function store(StorePerson $req)
     {
         $validated = $req->validated();
-        $person = Person::create($validated);
+        try {
+            $person = Person::create($validated);
+        } catch (UniqueConstraintViolationException $e) {
+            abort(400, 'duplicate url');
+        }
         return response([
             'message' => 'preson created',
             'data' => new PersonResource($person),
@@ -193,6 +221,7 @@ class PersonController extends Controller
     {
         $person = Person
             ::withCount('followers')
+            ->with('country:id,country_name')
             ->withCount('movies')
             ->find($id);
         abort_if($person == null, 404, 'preson not found');
@@ -216,9 +245,9 @@ class PersonController extends Controller
      *          )
      *      ),
      *      @OA\Parameter(
-     *          name="release_year",
+     *          name="release_date",
      *          in="query",
-     *          description="filter release_year of movies that person worked in",
+     *          description="filter release_date of movies that person worked in",
      *          @OA\Schema(
      *              format="string",
      *              default=""
@@ -304,7 +333,7 @@ class PersonController extends Controller
             ::select([
                 'movies.name',
                 'movies.url',
-                'movies.release_year',
+                'movies.release_date',
                 'movies.created_at',
                 'categories.name as category_name',
                 'movie_actors.job',
@@ -353,8 +382,23 @@ class PersonController extends Controller
      *                      default=""
      *                  ),
      *                  @OA\Property(
+     *                      property="url",
+     *                      description="url of person",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
      *                      property="birth_date",
      *                      description="new birth_date of person",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="about",
+     *                      description="about person",
+     *                      default=""
+     *                  ),
+     *                  @OA\Property(
+     *                      property="country",
+     *                      description="birth country of person",
      *                      default=""
      *                  )
      *              )
@@ -375,7 +419,11 @@ class PersonController extends Controller
     public function update(UpdatePerson $req)
     {
         $validated = $req->validated();
-        $ok = Person::where(['id' => $req->route('id')])->update($validated);
+        try {
+            $ok = Person::where(['id' => $req->route('id')])->update($validated);
+        } catch (UniqueConstraintViolationException $e) {
+            abort(400, 'duplicate url');
+        }
         abort_if(!$ok, 404, sprintf('person:`%d` not found', $req->route('id')));
         return response([
             'message' => 'person edited',

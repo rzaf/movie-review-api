@@ -28,8 +28,10 @@ class StoreMovie extends FormRequest
         return [
             'name' => 'required|string',
             'url' => 'required|string',
-            'release_year' => 'required|int|max:2020',
+            'release_date' => 'required|date|max:2020',
             'category_name' => 'required|string',
+            'summary' => 'sometimes|string|max:256',
+            'storyline' => 'sometimes|string|max:2048',
         ];
     }
 

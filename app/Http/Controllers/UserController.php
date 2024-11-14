@@ -73,7 +73,7 @@ class UserController extends Controller
         $user = Auth::user();
         DB::table('personal_access_tokens')->where(['tokenable_id' => $user->id])->delete();
         return response([
-            'new token' => $user->createToken('access token')->plainTextToken,
+            'new token' => 'Bearer ' . $user->createToken('access token')->plainTextToken,
             'user' => new UserResource($user),
         ], 200);
     }

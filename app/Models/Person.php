@@ -6,6 +6,7 @@ use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Person extends Model
@@ -13,10 +14,15 @@ class Person extends Model
     /** @use HasFactory<\Database\Factories\PersonFactory> */
     use HasFactory;
     use Filterable;
-    
+
     protected $table = 'people';
-    protected $fillable = ['name', 'is_male', 'birth_date'];
+    protected $fillable = ['name', 'url', 'is_male', 'birth_date', 'about', 'birth_country'];
     // protected $hidden = ['pivot'];
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'birth_country');
+    }
 
     public function movies(): BelongsToMany
     {
@@ -44,12 +50,12 @@ class Person extends Model
             case 'newest-created':
                 $order = 'created_at';
                 $dir = 'desc';
-                $query->orderBy($order, $dir)->orderBy('id','asc');
+                $query->orderBy($order, $dir)->orderBy('id', 'asc');
                 return;
             case 'oldest-created':
                 $order = 'created_at';
                 $dir = 'asc';
-                $query->orderBy($order, $dir)->orderBy('id','desc');
+                $query->orderBy($order, $dir)->orderBy('id', 'desc');
                 return;
             case 'youngest':
                 $order = 'birth_date';

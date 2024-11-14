@@ -17,7 +17,7 @@ class MovieStaffResource extends JsonResource
         return [
             'name' => $this->name,
             'url' => $this->url,
-            'release_year' => $this->release_year,
+            'release_date' => $this->release_date,
             'category_name' => $this->whenHas('category_name'),
             'tags' => $this->whenHas('tags_group_concat_name', function () {
                 return $this->tags_group_concat_name ?? '';

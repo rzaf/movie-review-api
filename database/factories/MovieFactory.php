@@ -2,7 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
+use App\Models\Movie;
+use Carbon\Carbon;
+use Database\Seeders\DatabaseSeeder;
+use Date;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,11 +20,14 @@ class MovieFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->unique()->words(rand(1, 4));
         return [
-            'name' => $this->faker->words(rand(1,4),true),
-            'url' =>$this->faker->unique()->word(),
-            'release_year'=>$this->faker->numberBetween(1970,2020),
-            'category_id' => $this->faker->numberBetween(1,Category::count()),
+            'name' => implode(' ', $name),
+            'url' => implode('_', $name),
+            'release_date' => $this->faker->date(max: Date::createFromDate(2024, 1, 1)),
+            'summary' => $this->faker->sentences(rand(3, 6), true),
+            'storyline' => $this->faker->sentences(rand(10, 25), true),
+            'category_id' => rand(1, DatabaseSeeder::$categoriesCnt),
         ];
     }
 }

@@ -16,14 +16,19 @@ class PersonResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            // 'id' => $this->id,
+            'url' => $this->url,
             'name' => $this->name,
             'age' => $this->whenHas('birth_date', function () {
                 return Carbon::parse($this->birth_date)->age;
             }),
+            'country' => $this->whenLoaded('country', function () {
+                return $this->country->name;
+            }),
             'gender' => $this->whenHas('is_male', function () {
                 return $this->is_male ? 'male' : 'female';
             }),
+            'about' => $this->whenHas('about'),
             'movies' => MovieResource::collection($this->whenLoaded('moviesWorkedIn')),
             'followers_count' => $this->whenCounted('followers'),
             'movies_count' => $this->whenCounted('movies'),

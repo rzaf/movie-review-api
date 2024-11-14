@@ -352,9 +352,9 @@
                         }
                     },
                     {
-                        "name": "release_year",
+                        "name": "release_date",
                         "in": "query",
-                        "description": "filter release_year",
+                        "description": "filter release_date",
                         "schema": {
                             "format": "int64",
                             "default": ""
@@ -424,12 +424,20 @@
                                         "description": "url of movie",
                                         "default": ""
                                     },
-                                    "release_year": {
-                                        "description": "release_year of movie",
+                                    "release_date": {
+                                        "description": "release_date of movie",
                                         "default": ""
                                     },
                                     "category_name": {
                                         "description": "category_name of movie",
+                                        "default": ""
+                                    },
+                                    "summary": {
+                                        "description": "summary of movie",
+                                        "default": ""
+                                    },
+                                    "storyline": {
+                                        "description": "storyline of movie",
                                         "default": ""
                                     }
                                 },
@@ -524,21 +532,38 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
+                                "required": [
+                                    "name"
+                                ],
                                 "properties": {
                                     "name": {
                                         "description": "new name of movie",
+                                        "type": "string",
                                         "default": ""
                                     },
                                     "url": {
                                         "description": "new url of movie",
+                                        "type": "string",
                                         "default": ""
                                     },
-                                    "release_year": {
-                                        "description": "new release_year of movie",
+                                    "release_date": {
+                                        "description": "new release_date of movie",
+                                        "type": "string",
                                         "default": ""
                                     },
                                     "category_name": {
                                         "description": "new category_name of movie",
+                                        "type": "string",
+                                        "default": ""
+                                    },
+                                    "summary": {
+                                        "description": "summary of movie",
+                                        "type": "string",
+                                        "default": ""
+                                    },
+                                    "storyline": {
+                                        "description": "storyline of movie",
+                                        "type": "string",
                                         "default": ""
                                     }
                                 },
@@ -1098,12 +1123,24 @@
                                         "description": "name of person",
                                         "default": ""
                                     },
+                                    "url": {
+                                        "description": "url of person",
+                                        "default": ""
+                                    },
                                     "is_male": {
                                         "description": "gender of person",
                                         "default": ""
                                     },
                                     "birth_date": {
                                         "description": "birth_date of person",
+                                        "default": ""
+                                    },
+                                    "about": {
+                                        "description": "about person",
+                                        "default": ""
+                                    },
+                                    "country": {
+                                        "description": "birth country of person",
                                         "default": ""
                                     }
                                 },
@@ -1203,8 +1240,20 @@
                                         "description": "new name of person",
                                         "default": ""
                                     },
+                                    "url": {
+                                        "description": "url of person",
+                                        "default": ""
+                                    },
                                     "birth_date": {
                                         "description": "new birth_date of person",
+                                        "default": ""
+                                    },
+                                    "about": {
+                                        "description": "about person",
+                                        "default": ""
+                                    },
+                                    "country": {
+                                        "description": "birth country of person",
                                         "default": ""
                                     }
                                 },
@@ -1299,9 +1348,9 @@
                         }
                     },
                     {
-                        "name": "release_year",
+                        "name": "release_date",
                         "in": "query",
-                        "description": "filter release_year of movies that person worked in",
+                        "description": "filter release_date of movies that person worked in",
                         "schema": {
                             "format": "string",
                             "default": ""

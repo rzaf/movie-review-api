@@ -36,11 +36,11 @@ class MovieStaff extends Model
                 $query->orderBy($order, $dir)->orderBy('movies.id','desc');
                 return;
             case 'newest-release':
-                $order = 'release_year';
+                $order = 'release_date';
                 $dir = 'desc';
                 break;
             case 'oldest-release':
-                $order = 'release_year';
+                $order = 'release_date';
                 $dir = 'asc';
                 break;
                 default:

@@ -28,8 +28,10 @@ class UpdateMovie extends FormRequest
         return [
             'name' => 'required|string',
             'url' => 'sometimes|string',
-            'release_year' => 'sometimes|int|max:2020',
+            'release_date' => 'sometimes|date|max:2020',
             'category_name' => 'sometimes|string',
+            'summary' => 'sometimes|string|max:256',
+            'storyline' => 'sometimes|string|max:2048',
         ];
     }
 

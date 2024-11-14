@@ -4,18 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+return new class extends Migration 
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('people', function (Blueprint $table) {
+        Schema::create('movie_countries', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->boolean('is_male');
-            $table->date('birth_date');
+            $table->foreignId('country_id')->constrained('countries');
+            $table->foreignId('movie_id')->constrained('movies');
+            $table->unique(['country_id', 'movie_id']);
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('people');
+        Schema::dropIfExists('movie_countries');
     }
 };
