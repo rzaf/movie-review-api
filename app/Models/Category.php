@@ -14,19 +14,9 @@ class Category extends Model
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
     use HasFactory;
     use Filterable;
-    
-    public $fillable = ['name', 'parent_id', 'has_items'];
+
+    public $fillable = ['name'];
     // public $hidden = ['id'];
-
-    public function parentCategory(): BelongsTo
-    {
-        return $this->belongsTo(Category::class, 'parent_id');
-    }
-
-    // public function childrenCategories(): HasMany
-    // {
-    //     return $this->hasMany(Category::class,'parent_id','id');
-    // }
 
     public function movies(): HasMany
     {
@@ -36,19 +26,14 @@ class Category extends Model
     public function scopeSortBy(Builder $query, ?string $sortType): void
     {
         $sortType ??= '';
-        $order = 'created_at';
-        $dir = 'desc';
         switch ($sortType) {
             case '':
-                break;
             case 'newest':
-                $order = 'created_at';
-                $dir = 'desc';
-                break;
+                $query->orderBy('created_at', 'desc')->orderBy('id', 'desc');
+                return;
             case 'oldest':
-                $order = 'created_at';
-                $dir = 'asc';
-                break;
+                $query->orderBy('created_at', 'asc')->orderBy('id', 'asc');
+                return;
             case 'most-movies':
                 $order = 'movies_count';
                 $dir = 'desc';

@@ -47,20 +47,13 @@ class Review extends Model
     public function scopeSortBy(Builder $query, ?string $sortType): void
     {
         $sortType ??= '';
-        $order = 'created_at';
-        $dir = 'desc';
         switch ($sortType) {
             case '':
-                break;
             case 'newest':
-                $order = 'created_at';
-                $dir = 'desc';
-                $query->orderBy($order, $dir)->orderBy('id','asc');
+                $query->orderBy('created_at', 'desc')->orderBy('id', 'desc');
                 return;
             case 'oldest':
-                $order = 'created_at';
-                $dir = 'asc';
-                $query->orderBy($order, $dir)->orderBy('id','desc');
+                $query->orderBy('created_at', 'asc')->orderBy('id', 'asc');
                 return;
             case 'highest-score':
                 $order = 'score';

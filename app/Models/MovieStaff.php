@@ -20,20 +20,13 @@ class MovieStaff extends Model
     public function scopeSortBy(Builder $query, ?string $sortType)
     {
         $sortType ??= '';
-        $order = 'movies.created_at';
-        $dir = 'desc';
         switch ($sortType) {
             case '':
-                break;
             case 'newest':
-                $order = 'movies.created_at';
-                $dir = 'desc';
-                $query->orderBy($order, $dir)->orderBy('movies.id','asc');
+                $query->orderBy('movies.created_at', 'desc')->orderBy('movies.id','desc');
                 return;
             case 'oldest':
-                $order = 'movies.created_at';
-                $dir = 'asc';
-                $query->orderBy($order, $dir)->orderBy('movies.id','desc');
+                $query->orderBy('movies.created_at', 'asc')->orderBy('movies.id','asc');
                 return;
             case 'newest-release':
                 $order = 'release_date';
