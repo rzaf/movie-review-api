@@ -193,16 +193,16 @@ class PersonController extends Controller
      * get specified person.
      *
      * @OA\Get(
-     *      path="/api/people/{id}",
+     *      path="/api/people/{url}",
      *      tags={"person"},
      *      @OA\Parameter(
-     *          name="id",
+     *          name="url",
      *          in="path",
-     *          description="id of person",
+     *          description="url of person",
      *          required=true,
      *          @OA\Schema(
-     *              format="int64",
-     *              default=1
+     *              format="string",
+     *              default=""
      *          )
      *      ),
      *      @OA\Response(
@@ -217,13 +217,14 @@ class PersonController extends Controller
      *      )
      * )
      */
-    public function show(string $id)
+    public function show(string $url)
     {
         $person = Person
             ::withCount('followers')
             ->with('country:id,country_name')
             ->withCount('medias')
-            ->find($id);
+            ->where('url', '=', $url)
+            ->first();
         abort_if($person == null, 404, 'preson not found');
         return new PersonResource($person);
     }
@@ -232,16 +233,16 @@ class PersonController extends Controller
      * get medias of specified person.
      *
      * @OA\Get(
-     *      path="/api/people/{id}/medias",
+     *      path="/api/people/{url}/medias",
      *      tags={"person"},
      *      @OA\Parameter(
-     *          name="id",
+     *          name="url",
      *          in="path",
-     *          description="id of person",
+     *          description="url of person",
      *          required=true,
      *          @OA\Schema(
-     *              format="int64",
-     *              default=1
+     *              format="string",
+     *              default=""
      *          )
      *      ),
      *      @OA\Parameter(
@@ -321,13 +322,14 @@ class PersonController extends Controller
      *      )
      * )
      */
-    public function personMedias(Request $req, string $id)
+    public function personMedias(Request $req, string $url)
     {
         $perpage = intval($req->query('perpage', 10));
         $person = Person
             ::withCount('medias')
             ->withCount('followers')
-            ->find($id);
+            ->where('url', '=', $url)
+            ->first();
         abort_if($person == null, 404, 'preson not found');
         $medias = MediaStaff
             ::select([
@@ -340,7 +342,7 @@ class PersonController extends Controller
             ])
             ->join('medias', 'media_id', '=', 'medias.id')
             ->join('categories', 'categories.id', '=', 'medias.category_id')
-            ->whereRaw('person_id=?', $id)
+            ->whereRaw('person_id=?', $person->id)
             ->filter($req->all())
             ->sortBy($req->query('sort'))
             ->simplePaginate($perpage);
@@ -355,16 +357,16 @@ class PersonController extends Controller
      * update specified person.
      *
      * @OA\Put(
-     *      path="/api/people/{id}",
+     *      path="/api/people/{url}",
      *      tags={"person"},
      *      @OA\Parameter(
-     *          name="id",
+     *          name="url",
      *          in="path",
-     *          description="id of person",
+     *          description="url of person",
      *          required=true,
      *          @OA\Schema(
-     *              format="int64",
-     *              default=1
+     *              format="string",
+     *              default=""
      *          )
      *      ),
      *      security={
@@ -416,11 +418,11 @@ class PersonController extends Controller
      *      )
      * )
      */
-    public function update(UpdatePerson $req)
+    public function update(UpdatePerson $req, string $url)
     {
         $validated = $req->validated();
         try {
-            $ok = Person::where(['id' => $req->route('id')])->update($validated);
+            $ok = Person::where('url', '=', $url)->update($validated);
         } catch (UniqueConstraintViolationException $e) {
             abort(400, 'duplicate url');
         }
@@ -435,16 +437,16 @@ class PersonController extends Controller
      * delete specified person.
      *
      * @OA\Delete(
-     *      path="/api/people/{id}",
+     *      path="/api/people/{url}",
      *      tags={"person"},
      *      @OA\Parameter(
-     *          name="id",
+     *          name="url",
      *          in="path",
-     *          description="id of person",
+     *          description="url of person",
      *          required=true,
      *          @OA\Schema(
-     *              format="int64",
-     *              default=1
+     *              format="string",
+     *              default=""
      *          )
      *      ),
      *      security={
@@ -462,9 +464,9 @@ class PersonController extends Controller
      *      )
      * )
      */
-    public function destroy(DestroyPerson $req)
+    public function destroy(DestroyPerson $req, string $url)
     {
-        $ok = Person::where(['id' => $req->route('id')])->delete();
+        $ok = Person::where('url', '=', $url)->delete();
         abort_if(!$ok, 404, 'person not found');
         return response([
             'message' => 'person deleted successfully'
@@ -477,16 +479,16 @@ class PersonController extends Controller
      * follow specified person.
      *
      * @OA\Post(
-     *      path="/api/people/{id}/following",
+     *      path="/api/people/{url}/following",
      *      tags={"person"},
      *      @OA\Parameter(
-     *          name="id",
+     *          name="url",
      *          in="path",
-     *          description="id of person",
+     *          description="url of person",
      *          required=true,
      *          @OA\Schema(
-     *              format="int64",
-     *              default=1
+     *              format="string",
+     *              default=""
      *          )
      *      ),
      *      security={
@@ -509,19 +511,17 @@ class PersonController extends Controller
      *      )
      * )
      */
-    public function storeFollowing(Request $req)
+    public function storeFollowing(string $url)
     {
+        $person = Person::where('url', '=', $url)->first('id');
+        abort_if($person == null, 404, 'preson not found');
         try {
             Following::create([
                 'follower_id' => auth()->user()->id,
-                'following_id' => $req->route('id'),
+                'following_id' => $person->id,
             ]);
         } catch (UniqueConstraintViolationException $e) {
             abort(400, 'person already followed');
-        } catch (QueryException $e) {
-            if ($e->getCode() == 23000) {
-                abort(404, 'person id not found');
-            }
         }
         return response([
             'message' => 'person followed',
@@ -533,16 +533,16 @@ class PersonController extends Controller
      * follow specified person.
      *
      * @OA\Delete(
-     *      path="/api/people/{id}/following",
+     *      path="/api/people/{url}/following",
      *      tags={"person"},
      *      @OA\Parameter(
-     *          name="id",
+     *          name="url",
      *          in="path",
-     *          description="id of person",
+     *          description="url of person",
      *          required=true,
      *          @OA\Schema(
-     *              format="int64",
-     *              default=1
+     *              format="string",
+     *              default=""
      *          )
      *      ),
      *      security={
@@ -560,13 +560,15 @@ class PersonController extends Controller
      *      )
      * )
      */
-    public function destroyFollowing(Request $req)
+    public function destroyFollowing(string $url)
     {
+        $person = Person::where('url', '=', $url)->first('id');
+        abort_if($person == null, 404, 'preson not found');
         $ok = Following::where([
             'follower_id' => auth()->user()->id,
-            'following_id' => $req->route('id'),
+            'following_id' => $person->id,
         ])->delete();
-        abort_if(!$ok, 400, 'person not found or not followed');
+        abort_if(!$ok, 400, 'person not followed');
         return response([
             'message' => 'person unfollowed',
         ], 200);

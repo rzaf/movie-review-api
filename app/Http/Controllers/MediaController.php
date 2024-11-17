@@ -15,6 +15,7 @@ use App\Models\Like;
 use App\Models\Media;
 use App\Models\MediaStaff;
 use App\Models\MediaGenre;
+use App\Models\Person;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
@@ -258,7 +259,7 @@ class MediaController extends Controller
     public function show(string $url)
     {
         $media = Media::where(['url' => $url])
-            ->with(['category:id,name','staff:name,url'])
+            ->with(['category:id,name', 'staff:name,url'])
             ->withAggregate('genres', 'name', 'group_concat')
             ->withAggregate('languages', 'name', 'group_concat')
             ->withAggregate('countries', 'country_name', 'group_concat')
@@ -517,7 +518,7 @@ class MediaController extends Controller
      * add a person to specified media.
      *
      * @OA\Post(
-     *      path="/api/medias/{url}/people/{person_id}",
+     *      path="/api/medias/{url}/people/{person_url}",
      *      tags={"media"},
      *      @OA\Parameter(
      *          name="url",
@@ -530,12 +531,12 @@ class MediaController extends Controller
      *          )
      *      ),
      *      @OA\Parameter(
-     *          name="person_id",
+     *          name="person_url",
      *          in="path",
-     *          description="id of person",
+     *          description="url of person",
      *          required=true,
      *          @OA\Schema(
-     *              format="int64",
+     *              format="string",
      *              default=""
      *          )
      *      ),
@@ -571,15 +572,17 @@ class MediaController extends Controller
     public function addPerson(AddPerson $req)
     {
         $validated = $req->validated();
+        $media = Media::where('url', '=', $req->route('media_url'))->first('id');
+        abort_if($media == null, 404, 'media not found');
+        $person = Person::where('url', '=', $req->route('person_url'))->first('id');
+        abort_if($person == null, 404, 'person not found');
+        $validated['media_id'] = $media->id;
+        $validated['person_id'] = $person->id;
         try {
             MediaStaff::create($validated);
         } catch (UniqueConstraintViolationException $e) {
             $job = $validated['job'];
             abort(400, "person already added to media as $job");
-        } catch (QueryException $e) {
-            if ($e->getCode() == 23000) {
-                abort(404, 'person id not found');
-            }
         }
         return response([
             'message' => 'person added to media',
@@ -591,7 +594,7 @@ class MediaController extends Controller
      * remove a person to specified media.
      *
      * @OA\Delete(
-     *      path="/api/medias/{url}/people/{person_id}",
+     *      path="/api/medias/{url}/people/{person_url}",
      *      tags={"media"},
      *      @OA\Parameter(
      *          name="url",
@@ -604,12 +607,12 @@ class MediaController extends Controller
      *          )
      *      ),
      *      @OA\Parameter(
-     *          name="person_id",
+     *          name="person_url",
      *          in="path",
-     *          description="id of person",
+     *          description="url of person",
      *          required=true,
      *          @OA\Schema(
-     *              format="int64",
+     *              format="string",
      *              default=""
      *          )
      *      ),
@@ -650,15 +653,16 @@ class MediaController extends Controller
     public function removePerson(AddPerson $req)
     {
         $validated = $req->validated();
-        try {
-            $ok = MediaStaff::where($validated)->delete();
-            $job = $validated['job'];
-            abort_if(!$ok, 400, "person was not in media as $job");
-        } catch (QueryException $e) {
-            if ($e->getCode() == 23000) {
-                abort(404, 'person id not found');
-            }
-        }
+        $media = Media::where('url', '=', $req->route('media_url'))->first('id');
+        abort_if($media == null, 404, 'media not found');
+        $person = Person::where('url', '=', $req->route('person_url'))->first('id');
+        abort_if($person == null, 404, 'person not found');
+        $validated['media_id'] = $media->id;
+        $validated['person_id'] = $person->id;
+        $ok = MediaStaff::where($validated)->delete();
+        $job = $validated['job'];
+        abort_if(!$ok, 400, "person was not in media as $job");
+
         return response([
             'message' => "person removed from media as $job",
         ], 200);

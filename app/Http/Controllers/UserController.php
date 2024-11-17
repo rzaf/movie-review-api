@@ -157,7 +157,7 @@ class UserController extends Controller
 
         return response([
             'message' => 'user created',
-            'date' => $user,
+            'data' => $user,
             'token' => $user->createToken('access token')->plainTextToken,
         ], 201);
     }

@@ -31,13 +31,13 @@ Route::delete('/categories/{name}', [CategoryController::class, 'destroy'])->mid
 // Route::apiResource('/people', PersonController::class);
 Route::post('/people', [PersonController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/people', [PersonController::class, 'index']);
-Route::get('/people/{id}/medias', [PersonController::class, 'personMedias']);
-Route::get('/people/{id}', [PersonController::class, 'show']);
-Route::put('/people/{id}', [PersonController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/people/{id}', [PersonController::class, 'destroy'])->middleware('auth:sanctum');
+Route::get('/people/{url}/medias', [PersonController::class, 'personMedias']);
+Route::get('/people/{url}', [PersonController::class, 'show']);
+Route::put('/people/{url}', [PersonController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/people/{url}', [PersonController::class, 'destroy'])->middleware('auth:sanctum');
 
-Route::post('/people/{id}/following', [PersonController::class, 'storeFollowing'])->middleware('auth:sanctum');
-Route::delete('/people/{id}/following', [PersonController::class, 'destroyFollowing'])->middleware('auth:sanctum');
+Route::post('/people/{url}/following', [PersonController::class, 'storeFollowing'])->middleware('auth:sanctum');
+Route::delete('/people/{url}/following', [PersonController::class, 'destroyFollowing'])->middleware('auth:sanctum');
 
 //// medias
 Route::post('/medias', [MediaController::class, 'store'])->middleware('auth:sanctum');
@@ -46,8 +46,8 @@ Route::get('/medias/{url}', [MediaController::class, 'show']);
 Route::put('/medias/{url}', [MediaController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/medias/{url}', [MediaController::class, 'destroy'])->middleware('auth:sanctum');
 
-Route::post('/medias/{media_url}/people/{person_id}', [MediaController::class, 'addPerson'])->middleware('auth:sanctum');
-Route::delete('/medias/{media_url}/people/{person_id}', [MediaController::class, 'removePerson'])->middleware('auth:sanctum');
+Route::post('/medias/{media_url}/people/{person_url}', [MediaController::class, 'addPerson'])->middleware('auth:sanctum');
+Route::delete('/medias/{media_url}/people/{person_url}', [MediaController::class, 'removePerson'])->middleware('auth:sanctum');
 
 Route::post('/medias/{media_url}/genres/{name}', [MediaController::class, 'addGenre'])->middleware('auth:sanctum');
 Route::delete('/medias/{media_url}/genres/{name}', [MediaController::class, 'removeGenre'])->middleware('auth:sanctum');

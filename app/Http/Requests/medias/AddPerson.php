@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\medias;
 
-use App\Models\Media;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -31,14 +30,14 @@ class AddPerson extends FormRequest
         ];
     }
 
-    public function validated($key = null, $default = null): array
-    {
-        $validated = parent::validated();
-        $media = Media::where(['url' => $this->route('media_url')])->first('id');
-        abort_if($media == null, 404, 'media not found');
-        $validated['media_id'] = $media->id;
-        $validated['person_id'] = $this->route('person_id');
-        return $validated;
-    }
+    // public function validated($key = null, $default = null): array
+    // {
+    //     $validated = parent::validated();
+    //     $media = Media::where(['url' => $this->route('media_url')])->first('id');
+    //     abort_if($media == null, 404, 'media not found');
+    //     $validated['media_id'] = $media->id;
+    //     $validated['person_id'] = $this->route('person_id');
+    //     return $validated;
+    // }
 
 }

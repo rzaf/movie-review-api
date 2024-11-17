@@ -749,13 +749,13 @@
                 ]
             }
         },
-        "/api/medias/{url}/people/{person_id}": {
+        "/api/medias/{url}/people/{person_url}": {
             "post": {
                 "tags": [
                     "media"
                 ],
                 "summary": "add a person to specified media.",
-                "operationId": "b64c542fa0b94b99813dd7c4e26c32fd",
+                "operationId": "226b4c0dc18efb65d7aeeef9eff2c81f",
                 "parameters": [
                     {
                         "name": "url",
@@ -768,12 +768,12 @@
                         }
                     },
                     {
-                        "name": "person_id",
+                        "name": "person_url",
                         "in": "path",
-                        "description": "id of person",
+                        "description": "url of person",
                         "required": true,
                         "schema": {
-                            "format": "int64",
+                            "format": "string",
                             "default": ""
                         }
                     }
@@ -823,7 +823,7 @@
                     "media"
                 ],
                 "summary": "remove a person to specified media.",
-                "operationId": "23301222aa043517e5dd19f390ba926f",
+                "operationId": "fc7ed107127c03c87442c5be0420c0be",
                 "parameters": [
                     {
                         "name": "url",
@@ -836,12 +836,12 @@
                         }
                     },
                     {
-                        "name": "person_id",
+                        "name": "person_url",
                         "in": "path",
-                        "description": "id of person",
+                        "description": "url of person",
                         "required": true,
                         "schema": {
-                            "format": "int64",
+                            "format": "string",
                             "default": ""
                         }
                     }
@@ -1174,22 +1174,22 @@
                 ]
             }
         },
-        "/api/people/{id}": {
+        "/api/people/{url}": {
             "get": {
                 "tags": [
                     "person"
                 ],
                 "summary": "get specified person.",
-                "operationId": "42f95ecf49b24da95843e43c429864ab",
+                "operationId": "6279208324fda32adf83be45e5b5068d",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "url",
                         "in": "path",
-                        "description": "id of person",
+                        "description": "url of person",
                         "required": true,
                         "schema": {
-                            "format": "int64",
-                            "default": 1
+                            "format": "string",
+                            "default": ""
                         }
                     }
                 ],
@@ -1217,16 +1217,16 @@
                     "person"
                 ],
                 "summary": "update specified person.",
-                "operationId": "adbf7ab6502ba622e14ffb6096ed7fe7",
+                "operationId": "a57f28eb5589847b3f8e1ab6f6ff7bab",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "url",
                         "in": "path",
-                        "description": "id of person",
+                        "description": "url of person",
                         "required": true,
                         "schema": {
-                            "format": "int64",
-                            "default": 1
+                            "format": "string",
+                            "default": ""
                         }
                     }
                 ],
@@ -1291,16 +1291,16 @@
                     "person"
                 ],
                 "summary": "delete specified person.",
-                "operationId": "201d5ffb55c341d735d3fc6a8f8dccc3",
+                "operationId": "5009f7941eb461422fa346122fd700b8",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "url",
                         "in": "path",
-                        "description": "id of person",
+                        "description": "url of person",
                         "required": true,
                         "schema": {
-                            "format": "int64",
-                            "default": 1
+                            "format": "string",
+                            "default": ""
                         }
                     }
                 ],
@@ -1329,22 +1329,22 @@
                 ]
             }
         },
-        "/api/people/{id}/medias": {
+        "/api/people/{url}/medias": {
             "get": {
                 "tags": [
                     "person"
                 ],
                 "summary": "get medias of specified person.",
-                "operationId": "62568b4f1657efe9e80db4151d03c1cb",
+                "operationId": "07a704bb0a9fdb8dda5fc7ba92fd76d4",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "url",
                         "in": "path",
-                        "description": "id of person",
+                        "description": "url of person",
                         "required": true,
                         "schema": {
-                            "format": "int64",
-                            "default": 1
+                            "format": "string",
+                            "default": ""
                         }
                     },
                     {
@@ -1444,22 +1444,22 @@
                 }
             }
         },
-        "/api/people/{id}/following": {
+        "/api/people/{url}/following": {
             "post": {
                 "tags": [
                     "person"
                 ],
                 "summary": "follow specified person.",
-                "operationId": "edb2144b1ecdb79bea39292cac37b0ae",
+                "operationId": "f4336c65ba14c09b8e248f8713425754",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "url",
                         "in": "path",
-                        "description": "id of person",
+                        "description": "url of person",
                         "required": true,
                         "schema": {
-                            "format": "int64",
-                            "default": 1
+                            "format": "string",
+                            "default": ""
                         }
                     }
                 ],
@@ -1500,16 +1500,16 @@
                     "person"
                 ],
                 "summary": "follow specified person.",
-                "operationId": "0081d60529f547fa0b22c40824809433",
+                "operationId": "e57c34b5fbc3ead9232f31029142a0a7",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "url",
                         "in": "path",
-                        "description": "id of person",
+                        "description": "url of person",
                         "required": true,
                         "schema": {
-                            "format": "int64",
-                            "default": 1
+                            "format": "string",
+                            "default": ""
                         }
                     }
                 ],
