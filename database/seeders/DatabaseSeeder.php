@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public static $keywordsCnt = 25;
     public static $companiesCnt = 25;
 
-    public static $mediasCnt = 50;
+    public static $mediasCnt = 100;
     // public static $reviewsCnt = 30;
 
     public static $peopleCnt = 100;

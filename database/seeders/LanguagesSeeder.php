@@ -20,6 +20,6 @@ class LanguagesSeeder extends Seeder
             'German',
             'French',
         ])->select('id')->pluck('id');
-        print_r(self::$famousLanguagesIds);
+        // print_r(self::$famousLanguagesIds);
     }
 }
