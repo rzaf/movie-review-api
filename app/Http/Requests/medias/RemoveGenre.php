@@ -13,7 +13,7 @@ class RemoveGenre extends FormRequest
      */
     public function authorize(): bool
     {
-        if (auth()->user()->isAdmin()){
+        if (auth()->user()->isAdmin()) {
             return true;
         }
         return false;
@@ -25,7 +25,7 @@ class RemoveGenre extends FormRequest
         $media = Media::where(['url' => $this->route('media_url')])->first('id');
         abort_if($media == null, 404, 'media not found');
         $validated['media_id'] = $media->id;
-        $genre = Genre::createOrFirst(['name' => $this->route('name')]);
+        $genre = Genre::firstWhere('name', '=', $this->route('name'));
         abort_if($genre == null, 404, 'genre not found');
         $validated['genre_id'] = $genre->id;
         return $validated;

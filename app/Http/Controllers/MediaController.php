@@ -11,12 +11,15 @@ use App\Http\Requests\medias\StoreMedia;
 use App\Http\Requests\medias\StoreMediaLike;
 use App\Http\Requests\medias\UpdateMedia;
 use App\Http\Resources\MediaResource;
+use App\Models\Company;
+use App\Models\Country;
+use App\Models\Keyword;
+use App\Models\Language;
 use App\Models\Like;
 use App\Models\Media;
 use App\Models\MediaStaff;
 use App\Models\MediaGenre;
 use App\Models\Person;
-use Illuminate\Database\QueryException;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 
@@ -774,11 +777,484 @@ class MediaController extends Controller
     {
         $validated = $req->validated();
         $ok = MediaGenre::where($validated)->delete();
-        abort_if(!$ok, 404, 'genre not in media');
+        abort_if(!$ok, 400, 'genre not in media');
 
         return response([
             'message' => 'genre removed from media',
         ], 200);
     }
 
+
+    /**
+     * add a keyword to specified media.
+     *
+     * @OA\Post(
+     *      path="/api/medias/{url}/keywords/{name}",
+     *      tags={"media"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of media",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="path",
+     *          description="name of keyword",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=201,
+     *          description="keyword added to media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="keyword already added to media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function addKeyword(string $mediaUrl, string $keywordName)
+    {
+        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
+        $media = Media::firstWhere('url', '=', $mediaUrl);
+        abort_if($media == null, 404, 'media not found');
+        $keyword = Keyword::createOrFirst(['name' => $keywordName]);
+        try {
+            $media->keywords()->attach($keyword->id);
+        } catch (UniqueConstraintViolationException $e) {
+            abort(400, "keyword already added to media");
+        }
+        return response([
+            'message' => 'keyword added to media',
+        ], 201);
+    }
+
+
+    /**
+     * remove keyword from specified media.
+     *
+     * @OA\Delete(
+     *      path="/api/medias/{url}/keywords/{name}",
+     *      tags={"media"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of media",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="path",
+     *          description="name of keyword",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="keyword removed from media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function removeKeyword(string $mediaUrl, string $keywordName)
+    {
+        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
+        $media = Media::firstWhere('url', '=', $mediaUrl);
+        abort_if($media == null, 404, 'media not found');
+        $keyword = Keyword::where(['name' => $keywordName])->first();
+        abort_if($keyword == null, 404, 'keyword not found');
+        $ok = $media->keywords()->detach($keyword->id);
+        abort_if(!$ok, 400, 'keyword not in media');
+        return response([
+            'message' => 'keyword removed from media',
+        ], 200);
+    }
+
+
+    /**
+     * add a company to specified media.
+     *
+     * @OA\Post(
+     *      path="/api/medias/{url}/companies/{name}",
+     *      tags={"media"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of media",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="path",
+     *          description="name of company",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=201,
+     *          description="company added to media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="company already added to media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function addCompany(string $mediaUrl, string $companyName)
+    {
+        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
+        $media = Media::firstWhere('url', '=', $mediaUrl);
+        abort_if($media == null, 404, 'media not found');
+        $company = Company::createOrFirst(['name' => $companyName]);
+        try {
+            $media->companies()->attach($company->id);
+        } catch (UniqueConstraintViolationException $e) {
+            abort(400, "company already added to media");
+        }
+        return response([
+            'message' => 'company added to media',
+        ], 201);
+    }
+
+    /**
+     * remove company from specified media.
+     *
+     * @OA\Delete(
+     *      path="/api/medias/{url}/companies/{name}",
+     *      tags={"media"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of media",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="path",
+     *          description="name of company",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="company removed from media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function removeCompany(string $mediaUrl, string $companyName)
+    {
+        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
+        $media = Media::firstWhere('url', '=', $mediaUrl);
+        abort_if($media == null, 404, 'media not found');
+        $company = Company::where(['name' => $companyName])->first();
+        abort_if($company == null, 404, 'company not found');
+        $ok = $media->companies()->detach($company->id);
+        abort_if(!$ok, 400, 'company not in media');
+        return response([
+            'message' => 'company removed from media',
+        ], 200);
+    }
+
+
+    /**
+     * add a language to specified media.
+     *
+     * @OA\Post(
+     *      path="/api/medias/{url}/languages/{name}",
+     *      tags={"media"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of media",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="path",
+     *          description="name of language",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=201,
+     *          description="language added to media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="language already added to media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function addLanguage(string $mediaUrl, string $languageName)
+    {
+        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
+        $media = Media::firstWhere('url', '=', $mediaUrl);
+        abort_if($media == null, 404, 'media not found');
+        $language = Language::firstWhere(['name' => $languageName]);
+        abort_if($language == null, 404, 'language not found');
+        try {
+            $media->languages()->attach($language->id);
+        } catch (UniqueConstraintViolationException $e) {
+            abort(400, "language already added to media");
+        }
+        return response([
+            'message' => 'language added to media',
+        ], 201);
+    }
+
+    /**
+     * remove language from specified media.
+     *
+     * @OA\Delete(
+     *      path="/api/medias/{url}/languages/{name}",
+     *      tags={"media"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of media",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="path",
+     *          description="name of language",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="language removed from media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function removeLanguage(string $mediaUrl, string $languageName)
+    {
+        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
+        $media = Media::firstWhere('url', '=', $mediaUrl);
+        abort_if($media == null, 404, 'media not found');
+        $language = Language::where(['name' => $languageName])->first();
+        abort_if($language == null, 404, 'language not found');
+        $ok = $media->languages()->detach($language->id);
+        abort_if(!$ok, 400, 'language not in media');
+        return response([
+            'message' => 'language removed from media',
+        ], 200);
+    }
+
+    /**
+     * add a country to specified media.
+     *
+     * @OA\Post(
+     *      path="/api/medias/{url}/countries/{name}",
+     *      tags={"media"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of media",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="path",
+     *          description="name of country",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=201,
+     *          description="country added to media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="country already added to media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function addCountry(string $mediaUrl, string $countryName)
+    {
+        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
+        $media = Media::firstWhere('url', '=', $mediaUrl);
+        abort_if($media == null, 404, 'media not found');
+        $country = Country::whereAny(['country_name', 'country_code'], '=', $countryName)->first();
+        abort_if($country == null, 404, 'country not found');
+        try {
+            $media->countries()->attach($country->id);
+        } catch (UniqueConstraintViolationException $e) {
+            abort(400, "country already added to media");
+        }
+        return response([
+            'message' => 'country added to media',
+        ], 201);
+    }
+
+    /**
+     * remove country from specified media.
+     *
+     * @OA\Delete(
+     *      path="/api/medias/{url}/countries/{name}",
+     *      tags={"media"},
+     *      @OA\Parameter(
+     *          name="url",
+     *          in="path",
+     *          description="url of media",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="path",
+     *          description="name of country",
+     *          required=true,
+     *          @OA\Schema(
+     *              format="string",
+     *              default=""
+     *          )
+     *      ),
+     *      security={
+     *          {"bearer": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="country removed from media",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+    public function removeCountry(string $mediaUrl, string $countryName)
+    {
+        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
+        $media = Media::firstWhere('url', '=', $mediaUrl);
+        abort_if($media == null, 404, 'media not found');
+        $country = Country::whereAny(['country_name', 'country_code'], '=', $countryName)->first();
+        abort_if($country == null, 404, 'country not found');
+        $ok = $media->countries()->detach($country->id);
+        abort_if(!$ok, 400, 'country not in media');
+        return response([
+            'message' => 'country removed from media',
+        ], 200);
+    }
 }

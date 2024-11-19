@@ -8,7 +8,10 @@ class Country extends Model
 {
     protected $table = 'countries';
 
-    public function getNameAttribute(){
+    public $fillable = ['country_name', 'country_code'];
+
+    public function getNameAttribute()
+    {
         return $this->country_name;
     }
 }

@@ -1009,6 +1009,462 @@
                 ]
             }
         },
+        "/api/medias/{url}/keywords/{name}": {
+            "post": {
+                "tags": [
+                    "media"
+                ],
+                "summary": "add a keyword to specified media.",
+                "operationId": "e1d63c893b6f54611e380770cd75d564",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of media",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of keyword",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "keyword added to media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "keyword already added to media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "media"
+                ],
+                "summary": "remove keyword from specified media.",
+                "operationId": "cbcd8231e5fef06e7ef029fcb3df392f",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of media",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of keyword",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "keyword removed from media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/medias/{url}/companies/{name}": {
+            "post": {
+                "tags": [
+                    "media"
+                ],
+                "summary": "add a company to specified media.",
+                "operationId": "69c36b209b11c4bfc69bf6d41a90bb5e",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of media",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of company",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "company added to media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "company already added to media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "media"
+                ],
+                "summary": "remove company from specified media.",
+                "operationId": "9e2be98ed8caafc747b6c9ab1d9c0b91",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of media",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of company",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "company removed from media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/medias/{url}/languages/{name}": {
+            "post": {
+                "tags": [
+                    "media"
+                ],
+                "summary": "add a language to specified media.",
+                "operationId": "3f573be5a2d5be6a94dd5ea5f6bf13f5",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of media",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of language",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "language added to media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "language already added to media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "media"
+                ],
+                "summary": "remove language from specified media.",
+                "operationId": "415b7c94d3a9917377e374ab89e1856e",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of media",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of language",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "language removed from media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/medias/{url}/countries/{name}": {
+            "post": {
+                "tags": [
+                    "media"
+                ],
+                "summary": "add a country to specified media.",
+                "operationId": "bb4a07ac198fd221962135f5eb1058b9",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of media",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of country",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "country added to media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "country already added to media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "media"
+                ],
+                "summary": "remove country from specified media.",
+                "operationId": "c5e4a4543d423312c7dc63fefcc33ff8",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "path",
+                        "description": "url of media",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of country",
+                        "required": true,
+                        "schema": {
+                            "format": "string",
+                            "default": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "country removed from media",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/people": {
             "get": {
                 "tags": [

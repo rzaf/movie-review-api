@@ -23,7 +23,6 @@ class AddGenre extends FormRequest
     public function validated($key = null, $default = null): array
     {
         $validated = parent::validated();
-        $validated['name'] = $this->route('name');
         $media = Media::where(['url' => $this->route('media_url')])->first('id');
         abort_if($media == null, 404, 'media not found');
         $validated['media_id'] = $media->id;

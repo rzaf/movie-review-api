@@ -52,6 +52,18 @@ Route::delete('/medias/{media_url}/people/{person_url}', [MediaController::class
 Route::post('/medias/{media_url}/genres/{name}', [MediaController::class, 'addGenre'])->middleware('auth:sanctum');
 Route::delete('/medias/{media_url}/genres/{name}', [MediaController::class, 'removeGenre'])->middleware('auth:sanctum');
 
+Route::post('/medias/{media_url}/keywords/{name}', [MediaController::class, 'addKeyword'])->middleware('auth:sanctum');
+Route::delete('/medias/{media_url}/keywords/{name}', [MediaController::class, 'removeKeyword'])->middleware('auth:sanctum');
+
+Route::post('/medias/{media_url}/companies/{name}', [MediaController::class, 'addCompany'])->middleware('auth:sanctum');
+Route::delete('/medias/{media_url}/companies/{name}', [MediaController::class, 'removeCompany'])->middleware('auth:sanctum');
+
+Route::post('/medias/{media_url}/countries/{name}', [MediaController::class, 'addCountry'])->middleware('auth:sanctum');
+Route::delete('/medias/{media_url}/countries/{name}', [MediaController::class, 'removeCountry'])->middleware('auth:sanctum');
+
+Route::post('/medias/{media_url}/languages/{name}', [MediaController::class, 'addLanguage'])->middleware('auth:sanctum');
+Route::delete('/medias/{media_url}/languages/{name}', [MediaController::class, 'removeLanguage'])->middleware('auth:sanctum');
+
 Route::post('/medias/{media_url}/like', [MediaController::class, 'storeLike'])->middleware('auth:sanctum');
 Route::delete('/medias/{media_url}/like', [MediaController::class, 'destroyLike'])->middleware('auth:sanctum');
 
