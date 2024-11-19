@@ -12,10 +12,7 @@ class StorePerson extends FormRequest
      */
     public function authorize(): bool
     {
-        if (auth()->user()->isAdmin()) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**

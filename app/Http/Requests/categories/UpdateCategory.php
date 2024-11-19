@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\categories;
 
-use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCategory extends FormRequest
@@ -12,10 +11,7 @@ class UpdateCategory extends FormRequest
      */
     public function authorize(): bool
     {
-        if (auth()->user()->isAdmin()){
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**
@@ -26,9 +22,7 @@ class UpdateCategory extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:16',
-            'parent_name' => 'sometimes|string|max:16',
-            'has_items' => 'sometimes|bool',
+            'name' => 'required|string|max:16'
         ];
     }
 }

@@ -11,10 +11,7 @@ class StoreCategory extends FormRequest
      */
     public function authorize(): bool
     {
-        if (auth()->user()->isAdmin()) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**

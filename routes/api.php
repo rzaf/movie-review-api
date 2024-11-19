@@ -6,6 +6,7 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\AdminOnly;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,47 +23,47 @@ Route::delete('/users/{username}', [UserController::class, 'destroy'])->middlewa
 
 
 // Route::apiResource('/categories', CategoryController::class);
-Route::post('/categories', [CategoryController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/categories', [CategoryController::class, 'store'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{name}', [CategoryController::class, 'show']);
-Route::put('/categories/{name}', [CategoryController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/categories/{name}', [CategoryController::class, 'destroy'])->middleware('auth:sanctum');
+Route::put('/categories/{name}', [CategoryController::class, 'update'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
+Route::delete('/categories/{name}', [CategoryController::class, 'destroy'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 
 // Route::apiResource('/people', PersonController::class);
-Route::post('/people', [PersonController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/people', [PersonController::class, 'store'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 Route::get('/people', [PersonController::class, 'index']);
 Route::get('/people/{url}/medias', [PersonController::class, 'personMedias']);
 Route::get('/people/{url}', [PersonController::class, 'show']);
-Route::put('/people/{url}', [PersonController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/people/{url}', [PersonController::class, 'destroy'])->middleware('auth:sanctum');
+Route::put('/people/{url}', [PersonController::class, 'update'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
+Route::delete('/people/{url}', [PersonController::class, 'destroy'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 
 Route::post('/people/{url}/following', [PersonController::class, 'storeFollowing'])->middleware('auth:sanctum');
 Route::delete('/people/{url}/following', [PersonController::class, 'destroyFollowing'])->middleware('auth:sanctum');
 
 //// medias
-Route::post('/medias', [MediaController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/medias', [MediaController::class, 'store'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 Route::get('/medias', [MediaController::class, 'index']);
 Route::get('/medias/{url}', [MediaController::class, 'show']);
-Route::put('/medias/{url}', [MediaController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/medias/{url}', [MediaController::class, 'destroy'])->middleware('auth:sanctum');
+Route::put('/medias/{url}', [MediaController::class, 'update'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
+Route::delete('/medias/{url}', [MediaController::class, 'destroy'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 
-Route::post('/medias/{media_url}/people/{person_url}', [MediaController::class, 'addPerson'])->middleware('auth:sanctum');
-Route::delete('/medias/{media_url}/people/{person_url}', [MediaController::class, 'removePerson'])->middleware('auth:sanctum');
+Route::post('/medias/{media_url}/people/{person_url}', [MediaController::class, 'addPerson'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
+Route::delete('/medias/{media_url}/people/{person_url}', [MediaController::class, 'removePerson'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 
-Route::post('/medias/{media_url}/genres/{name}', [MediaController::class, 'addGenre'])->middleware('auth:sanctum');
-Route::delete('/medias/{media_url}/genres/{name}', [MediaController::class, 'removeGenre'])->middleware('auth:sanctum');
+Route::post('/medias/{media_url}/genres/{name}', [MediaController::class, 'addGenre'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
+Route::delete('/medias/{media_url}/genres/{name}', [MediaController::class, 'removeGenre'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 
-Route::post('/medias/{media_url}/keywords/{name}', [MediaController::class, 'addKeyword'])->middleware('auth:sanctum');
-Route::delete('/medias/{media_url}/keywords/{name}', [MediaController::class, 'removeKeyword'])->middleware('auth:sanctum');
+Route::post('/medias/{media_url}/keywords/{name}', [MediaController::class, 'addKeyword'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
+Route::delete('/medias/{media_url}/keywords/{name}', [MediaController::class, 'removeKeyword'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 
-Route::post('/medias/{media_url}/companies/{name}', [MediaController::class, 'addCompany'])->middleware('auth:sanctum');
-Route::delete('/medias/{media_url}/companies/{name}', [MediaController::class, 'removeCompany'])->middleware('auth:sanctum');
+Route::post('/medias/{media_url}/companies/{name}', [MediaController::class, 'addCompany'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
+Route::delete('/medias/{media_url}/companies/{name}', [MediaController::class, 'removeCompany'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 
-Route::post('/medias/{media_url}/countries/{name}', [MediaController::class, 'addCountry'])->middleware('auth:sanctum');
-Route::delete('/medias/{media_url}/countries/{name}', [MediaController::class, 'removeCountry'])->middleware('auth:sanctum');
+Route::post('/medias/{media_url}/countries/{name}', [MediaController::class, 'addCountry'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
+Route::delete('/medias/{media_url}/countries/{name}', [MediaController::class, 'removeCountry'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 
-Route::post('/medias/{media_url}/languages/{name}', [MediaController::class, 'addLanguage'])->middleware('auth:sanctum');
-Route::delete('/medias/{media_url}/languages/{name}', [MediaController::class, 'removeLanguage'])->middleware('auth:sanctum');
+Route::post('/medias/{media_url}/languages/{name}', [MediaController::class, 'addLanguage'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
+Route::delete('/medias/{media_url}/languages/{name}', [MediaController::class, 'removeLanguage'])->middleware('auth:sanctum')->middleware(AdminOnly::class);
 
 Route::post('/medias/{media_url}/like', [MediaController::class, 'storeLike'])->middleware('auth:sanctum');
 Route::delete('/medias/{media_url}/like', [MediaController::class, 'destroyLike'])->middleware('auth:sanctum');

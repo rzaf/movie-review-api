@@ -4,6 +4,8 @@ namespace App\Http\Requests\medias;
 
 use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ValidationException;
+use Validator;
 
 class StoreMedia extends FormRequest
 {
@@ -12,10 +14,7 @@ class StoreMedia extends FormRequest
      */
     public function authorize(): bool
     {
-        if (auth()->user()->isAdmin()) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**
@@ -39,7 +38,7 @@ class StoreMedia extends FormRequest
     {
         $validated = parent::validated();
         $cat = Category::where(['name' => $validated['category_name']])->first(['id']);
-        abort_if($cat == null, 404, 'category not found');
+        abort_if($cat == null, 400, 'invalid category name');
         $validated['category_id'] = $cat->id;
         unset($validated['category_name']);
         return $validated;

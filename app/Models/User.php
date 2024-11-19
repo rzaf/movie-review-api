@@ -63,6 +63,6 @@ class User extends Authenticatable
 
     public function followings(): BelongsToMany
     {
-        return $this->belongsToMany(Person::class, 'followings');
+        return $this->belongsToMany(Person::class, 'followings', 'follower_id', 'following_id');
     }
 }

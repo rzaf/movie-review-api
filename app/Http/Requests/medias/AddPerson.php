@@ -12,10 +12,7 @@ class AddPerson extends FormRequest
      */
     public function authorize(): bool
     {
-        if (auth()->user()->isAdmin()) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**
@@ -29,15 +26,5 @@ class AddPerson extends FormRequest
             'job' => ['required', 'string', Rule::in(['director', 'producer', 'writer', 'actor', 'music'])],
         ];
     }
-
-    // public function validated($key = null, $default = null): array
-    // {
-    //     $validated = parent::validated();
-    //     $media = Media::where(['url' => $this->route('media_url')])->first('id');
-    //     abort_if($media == null, 404, 'media not found');
-    //     $validated['media_id'] = $media->id;
-    //     $validated['person_id'] = $this->route('person_id');
-    //     return $validated;
-    // }
 
 }

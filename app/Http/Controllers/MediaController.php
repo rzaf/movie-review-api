@@ -3,22 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\medias\AddPerson;
-use App\Http\Requests\medias\AddGenre;
-use App\Http\Requests\medias\DestroyMedia;
 use App\Http\Requests\medias\DestroyMediaLike;
-use App\Http\Requests\medias\RemoveGenre;
 use App\Http\Requests\medias\StoreMedia;
 use App\Http\Requests\medias\StoreMediaLike;
 use App\Http\Requests\medias\UpdateMedia;
 use App\Http\Resources\MediaResource;
 use App\Models\Company;
 use App\Models\Country;
+use App\Models\Genre;
 use App\Models\Keyword;
 use App\Models\Language;
 use App\Models\Like;
 use App\Models\Media;
 use App\Models\MediaStaff;
-use App\Models\MediaGenre;
 use App\Models\Person;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
@@ -405,7 +402,7 @@ class MediaController extends Controller
      *      )
      * )
      */
-    public function destroy(DestroyMedia $req, string $url)
+    public function destroy(string $url)
     {
         $ok = Media::where(['url' => $url])->delete();
         abort_if($ok == null, 404, 'media not found');
@@ -718,11 +715,13 @@ class MediaController extends Controller
      *      )
      * )
      */
-    public function addGenre(AddGenre $req)
+    public function addGenre(string $mediaUrl, string $gnereName)
     {
-        $validated = $req->validated();
+        $media = Media::where(['url' => $mediaUrl])->first('id');
+        abort_if($media == null, 404, 'media not found');
+        $genre = Genre::createOrFirst(['name' => $gnereName]);
         try {
-            MediaGenre::create($validated);
+            $media->genres()->attach([$genre->id]);
         } catch (UniqueConstraintViolationException $e) {
             abort(400, "genre already added to media");
         }
@@ -773,10 +772,14 @@ class MediaController extends Controller
      *      )
      * )
      */
-    public function removeGenre(RemoveGenre $req)
+    public function removeGenre(string $mediaUrl, string $gnereName)
     {
-        $validated = $req->validated();
-        $ok = MediaGenre::where($validated)->delete();
+        $media = Media::where(['url' => $mediaUrl])->first('id');
+        abort_if($media == null, 404, 'media not found');
+        $genre = Genre::firstWhere('name', '=', $gnereName);
+        abort_if($genre == null, 404, 'genre not found');
+        // $ok = MediaGenre::where($validated)->delete();
+        $ok = $media->genres()->detach($genre->id);
         abort_if(!$ok, 400, 'genre not in media');
 
         return response([
@@ -833,7 +836,6 @@ class MediaController extends Controller
      */
     public function addKeyword(string $mediaUrl, string $keywordName)
     {
-        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
         $media = Media::firstWhere('url', '=', $mediaUrl);
         abort_if($media == null, 404, 'media not found');
         $keyword = Keyword::createOrFirst(['name' => $keywordName]);
@@ -891,7 +893,6 @@ class MediaController extends Controller
      */
     public function removeKeyword(string $mediaUrl, string $keywordName)
     {
-        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
         $media = Media::firstWhere('url', '=', $mediaUrl);
         abort_if($media == null, 404, 'media not found');
         $keyword = Keyword::where(['name' => $keywordName])->first();
@@ -952,7 +953,6 @@ class MediaController extends Controller
      */
     public function addCompany(string $mediaUrl, string $companyName)
     {
-        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
         $media = Media::firstWhere('url', '=', $mediaUrl);
         abort_if($media == null, 404, 'media not found');
         $company = Company::createOrFirst(['name' => $companyName]);
@@ -1009,7 +1009,6 @@ class MediaController extends Controller
      */
     public function removeCompany(string $mediaUrl, string $companyName)
     {
-        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
         $media = Media::firstWhere('url', '=', $mediaUrl);
         abort_if($media == null, 404, 'media not found');
         $company = Company::where(['name' => $companyName])->first();
@@ -1070,7 +1069,6 @@ class MediaController extends Controller
      */
     public function addLanguage(string $mediaUrl, string $languageName)
     {
-        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
         $media = Media::firstWhere('url', '=', $mediaUrl);
         abort_if($media == null, 404, 'media not found');
         $language = Language::firstWhere(['name' => $languageName]);
@@ -1128,7 +1126,6 @@ class MediaController extends Controller
      */
     public function removeLanguage(string $mediaUrl, string $languageName)
     {
-        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
         $media = Media::firstWhere('url', '=', $mediaUrl);
         abort_if($media == null, 404, 'media not found');
         $language = Language::where(['name' => $languageName])->first();
@@ -1188,7 +1185,6 @@ class MediaController extends Controller
      */
     public function addCountry(string $mediaUrl, string $countryName)
     {
-        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
         $media = Media::firstWhere('url', '=', $mediaUrl);
         abort_if($media == null, 404, 'media not found');
         $country = Country::whereAny(['country_name', 'country_code'], '=', $countryName)->first();
@@ -1246,7 +1242,6 @@ class MediaController extends Controller
      */
     public function removeCountry(string $mediaUrl, string $countryName)
     {
-        abort_if(!auth()->user()->isAdmin(), 403, 'not admin');
         $media = Media::firstWhere('url', '=', $mediaUrl);
         abort_if($media == null, 404, 'media not found');
         $country = Country::whereAny(['country_name', 'country_code'], '=', $countryName)->first();

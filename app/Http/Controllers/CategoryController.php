@@ -129,7 +129,6 @@ class CategoryController extends Controller
         }
         return response([
             'message' => 'category created',
-            // 'data' => new CategoryResource($cat),
         ], 201);
     }
 
@@ -273,9 +272,9 @@ class CategoryController extends Controller
      *      )
      * )
      */
-    public function destroy(DestroyCategory $req)
+    public function destroy(string $categoryName)
     {
-        $ok = Category::where(['name' => $req->route('name')])->delete();
+        $ok = Category::where(['name' => $categoryName])->delete();
         abort_if($ok == null, 404, 'cateogry not found');
         return response([
             'message' => 'category deleted successfully'

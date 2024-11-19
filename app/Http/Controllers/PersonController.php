@@ -464,7 +464,7 @@ class PersonController extends Controller
      *      )
      * )
      */
-    public function destroy(DestroyPerson $req, string $url)
+    public function destroy(string $url)
     {
         $ok = Person::where('url', '=', $url)->delete();
         abort_if(!$ok, 404, 'person not found');
