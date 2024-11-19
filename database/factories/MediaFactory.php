@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Media;
-use Carbon\Carbon;
 use Database\Seeders\DatabaseSeeder;
 use Date;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -20,12 +18,12 @@ class MediaFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->unique()->words(rand(1, 4));
+        $name = $this->faker->unique()->words(2);
         return [
             'name' => implode(' ', $name),
             'url' => implode('_', $name),
             'release_date' => $this->faker->date(max: Date::createFromDate(2024, 1, 1)),
-            'summary' => $this->faker->sentences(rand(3, 6), true),
+            'summary' => $this->faker->text(256),
             'storyline' => $this->faker->sentences(rand(10, 25), true),
             'category_id' => rand(1, DatabaseSeeder::$categoriesCnt),
         ];
